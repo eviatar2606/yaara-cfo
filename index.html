@@ -61,9 +61,14 @@
             </div>
             <p class="text-sm text-slate-500 mb-4">How many shares do we need to sell to hit a specific ₪ target?</p>
             
-            <div class="flex gap-3 mb-4">
-                <input type="number" id="target-ils-input" placeholder="e.g. 100000" class="flex-1 rounded-xl border-slate-300 border p-3 text-lg font-mono focus:ring-indigo-500 focus:border-indigo-500">
-                <button id="calc-button" class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold active:bg-indigo-700 transition">Calculate</button>
+            <div class="space-y-3 mb-4">
+                <div class="relative flex items-center">
+                    <span class="absolute left-3.5 text-slate-400 font-bold font-mono text-lg">₪</span>
+                    <input type="number" id="target-ils-input" placeholder="Enter target amount in ₪ ILS" class="w-full rounded-xl border-slate-300 border p-3.5 pl-9 text-lg font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none shadow-sm">
+                </div>
+                <button id="calc-button" class="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold text-base active:bg-indigo-700 hover:bg-indigo-700 transition shadow-sm flex items-center justify-center gap-2">
+                    <i class="ph ph-calculator text-xl"></i> Calculate Required Shares
+                </button>
             </div>
 
             <!-- Results -->
@@ -193,10 +198,28 @@
             }
         });
 
+        const defaultTransactions = {
+            "tx_1": { id: "tx_1", date: "Sep 2022", qty: 2050, price_usd: 20.92, rate_ils: 3.07, status: "completed" },
+            "tx_2": { id: "tx_2", date: "Sep 2023", qty: 580, price_usd: 28.48, rate_ils: 3.07, status: "completed" },
+            "tx_3": { id: "tx_3", date: "Feb 2024", qty: 400, price_usd: 39.20, rate_ils: 3.07, status: "completed" },
+            "tx_4": { id: "tx_4", date: "Apr 2024", qty: 1100, price_usd: 37.79, rate_ils: 3.07, status: "completed" },
+            "tx_5": { id: "tx_5", date: "Feb 2025", qty: 1000, price_usd: 41.00, rate_ils: 3.07, status: "locked" },
+            "tx_6": { id: "tx_6", date: "Sep 2025", qty: 2300, price_usd: 50.00, rate_ils: 3.07, status: "locked" },
+            "tx_7": { id: "tx_7", date: "Nov 2025", qty: 1800, price_usd: 80.64, rate_ils: 3.07, status: "planned" },
+            "tx_8": { id: "tx_8", date: "Dec 2025", qty: 800, price_usd: 70.00, rate_ils: 3.07, status: "locked" },
+            "tx_9": { id: "tx_9", date: "May 2026", qty: 420, price_usd: 75.00, rate_ils: 3.07, status: "planned" },
+            "tx_10": { id: "tx_10", date: "Jun 2026", qty: 400, price_usd: 82.00, rate_ils: 3.07, status: "planned" },
+            "tx_11": { id: "tx_11", date: "Jul 2026", qty: 500, price_usd: 80.64, rate_ils: 3.07, status: "planned" },
+            "tx_12": { id: "tx_12", date: "Jul 2026", qty: 500, price_usd: 80.64, rate_ils: 3.07, status: "planned" }
+        };
+
         onValue(txRef, (snapshot) => {
             const data = snapshot.val();
-            if (data) {
+            if (data && Object.keys(data).length > 0) {
                 renderTransactions(data);
+            } else {
+                set(txRef, defaultTransactions);
+                renderTransactions(defaultTransactions);
             }
         });
 
