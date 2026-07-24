@@ -25,10 +25,10 @@
     <header class="bg-indigo-600 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
         <h1 class="text-xl font-bold tracking-tight">Yaara CFO</h1>
         <div class="text-right">
-            <div class="text-[10px] text-indigo-200 uppercase font-semibold tracking-wider">STOCK PULSE</div>
+            <div class="text-[10px] text-indigo-200 uppercase font-semibold tracking-wider">FROG (JFROG) PULSE</div>
             <div class="flex items-center gap-1 font-mono font-bold text-lg justify-end">
                 <span>$</span>
-                <input type="number" id="stock-price-input" step="0.01" class="w-20 bg-indigo-700/50 text-white text-right rounded px-1 border border-indigo-400 focus:outline-none" value="94.15">
+                <input type="number" id="stock-price-input" step="0.01" class="w-20 bg-indigo-700/50 text-white text-right rounded px-1 border border-indigo-400 focus:outline-none" value="80.69">
             </div>
         </div>
     </header>
@@ -149,6 +149,37 @@
             }
         }
         fetchLiveExchangeRate();
+
+        async function fetchLiveStockPrice() {
+            try {
+                const res = await fetch('https://api.nasdaq.com/api/quote/FROG/info?assetclass=stocks');
+                const data = await res.json();
+                if (data && data.data && data.data.primaryData && data.data.primaryData.lastSalePrice) {
+                    const rawPrice = data.data.primaryData.lastSalePrice.replace('$', '').replace(',', '');
+                    const price = parseFloat(rawPrice);
+                    if (price && price > 0) {
+                        currentPriceUSD = price;
+                        document.getElementById('stock-price-input').value = currentPriceUSD.toFixed(2);
+                        updateDashboard();
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.warn("Nasdaq stock fetch failed, trying fallback...", e);
+            }
+            try {
+                const res = await fetch('https://query2.finance.yahoo.com/v8/finance/chart/FROG');
+                const data = await res.json();
+                if (data && data.chart && data.chart.result && data.chart.result[0].meta.regularMarketPrice) {
+                    currentPriceUSD = data.chart.result[0].meta.regularMarketPrice;
+                    document.getElementById('stock-price-input').value = currentPriceUSD.toFixed(2);
+                    updateDashboard();
+                }
+            } catch (e) {
+                console.warn("Fallback stock price fetch failed.", e);
+            }
+        }
+        fetchLiveStockPrice();
 
         const portfolioRef = ref(db, 'portfolio');
         const txRef = ref(db, 'transactions');
