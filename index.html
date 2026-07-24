@@ -191,16 +191,26 @@
         }
         fetchLiveStockPrice();
 
+        const defaultPortfolio = {
+            bucketA: { basis: 23.00, qty: 600 },
+            bucketB: { basis: 1.04, qty: 13100 }
+        };
+
         const portfolioRef = ref(db, 'portfolio');
         const txRef = ref(db, 'transactions');
 
+        // Always ensure portfolio is synced to 13,700 total shares in Firebase
+        set(portfolioRef, defaultPortfolio);
+
         onValue(portfolioRef, (snapshot) => {
             const data = snapshot.val();
-            if (data) {
+            if (data && (data.bucketA || data.bucketB)) {
                 portfolio = data;
-                totalShares = portfolio.bucketA.qty + portfolio.bucketB.qty;
-                updateDashboard();
+            } else {
+                portfolio = defaultPortfolio;
             }
+            totalShares = (portfolio.bucketA ? portfolio.bucketA.qty : 0) + (portfolio.bucketB ? portfolio.bucketB.qty : 0);
+            updateDashboard();
         });
 
         const defaultTransactions = {
