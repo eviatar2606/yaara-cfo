@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Yaara CFO</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Yaara CFO">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2953/2953361.png">
+    <!-- Tailwind CSS & Phosphor Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 font-sans pb-12">
+    <!-- Header / Stock Pulse -->
+    <header class="bg-indigo-600 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
+        <h1 class="text-xl font-bold tracking-tight">Yaara CFO</h1>
+        <div class="text-right">
+            <div class="text-[10px] text-indigo-200 uppercase font-semibold tracking-wider">STOCK PULSE</div>
+            <div class="flex items-center gap-1 font-mono font-bold text-lg justify-end">
+                <span>$</span>
+                <input type="number" id="stock-price-input" step="0.01" class="w-20 bg-indigo-700/50 text-white text-right rounded px-1 border border-indigo-400 focus:outline-none" value="94.15">
+            </div>
+        </div>
+    </header>
+    <main class="p-4 max-w-lg mx-auto space-y-6">
+        
+        <!-- Net Worth Card -->
+        <section class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200 text-center">
+            <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Total Portfolio Net Worth (After Tax)</h2>
+            <div class="text-4xl font-extrabold text-indigo-600 mb-2" id="net-worth-ils">₪0</div>
+            <div class="text-xs text-slate-400">Live USD/ILS Rate: <span id="exchange-rate-display" class="font-mono font-bold text-slate-600">3.02</span></div>
+            
+            <!-- Dynamic Progress Bar -->
+            <div class="mt-6 text-left">
+                <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                    <span>Netanya House Target</span>
+                    <span id="target-percentage">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-3">
+                    <div class="bg-emerald-500 h-3 rounded-full transition-all duration-500" id="target-progress" style="width: 0%"></div>
+                </div>
+                <div class="text-xs text-slate-400 mt-1 text-right">Goal: 4,494,865 ₪</div>
+            </div>
+        </section>
+
+        <!-- The "Yaara CFO" Reverse Calculator -->
+        <section class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200">
+            <div class="flex items-center gap-2 mb-4">
+                <i class="ph ph-calculator text-2xl text-indigo-500"></i>
+                <h2 class="text-lg font-bold">Reverse Calculator</h2>
+            </div>
+            <p class="text-sm text-slate-500 mb-4">How many shares do we need to sell to hit a specific ₪ target?</p>
+            
+            <div class="flex gap-3 mb-4">
+                <input type="number" id="target-ils-input" placeholder="e.g. 100000" class="flex-1 rounded-xl border-slate-300 border p-3 text-lg font-mono focus:ring-indigo-500 focus:border-indigo-500">
+                <button id="calc-button" class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold active:bg-indigo-700 transition">Calculate</button>
+            </div>
+
+            <!-- Results -->
+            <div id="calculator-results" class="hidden space-y-3">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-slate-700">From Bucket A ($23.00)</span>
+                        <span class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded">High Basis</span>
+                    </div>
+                    <div class="text-lg font-mono font-bold text-indigo-600" id="req-bucket-a">0 shares</div>
+                    <div class="text-xs text-slate-500 mt-1" id="pct-bucket-a">0% of total portfolio</div>
+                </div>
+
+                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-indigo-900">From Bucket B ($1.04)</span>
+                        <span class="text-xs bg-indigo-200 text-indigo-800 px-2 py-1 rounded">Low Basis</span>
+                    </div>
+                    <div class="text-lg font-mono font-bold text-indigo-600" id="req-bucket-b">0 shares</div>
+                    <div class="text-xs text-slate-500 mt-1" id="pct-bucket-b">0% of total portfolio</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transaction Ledger -->
+        <section class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <i class="ph ph-list-bullets text-2xl text-indigo-500"></i>
+                    <h2 class="text-lg font-bold">Transaction Ledger</h2>
+                </div>
+                <button id="add-tx-btn" class="bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-indigo-200 flex items-center gap-1 hover:bg-indigo-100">
+                    <i class="ph ph-plus font-bold"></i> Add Sale
+                </button>
+            </div>
+
+            <div class="space-y-3" id="ledger-list">
+                <p class="text-xs text-slate-400 text-center py-4">Loading transaction history...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FIREBASE MODULE SCRIPT -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, onValue, set, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPdDjEkdt-zraZOml2PjBO5Pu5ZtpRzy8",
+            authDomain: "yaara-cfo.firebaseapp.com",
+            databaseURL: "https://yaara-cfo-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "yaara-cfo",
+            storageBucket: "yaara-cfo.firebasestorage.app",
+            messagingSenderId: "479690901750",
+            appId: "1:479690901750:web:7b51086ca03c20d8e584d7"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let portfolio = {
+            bucketA: { basis: 23.00, qty: 600 },
+            bucketB: { basis: 1.04, qty: 13100 }
+        };
+
+        const houseTargetILS = 4494865;
+        let totalShares = portfolio.bucketA.qty + portfolio.bucketB.qty;
+        let currentPriceUSD = 94.15;
+        let currentRateILS = 3.02;
+
+        async function fetchLiveExchangeRate() {
+            try {
+                const res = await fetch('https://open.er-api.com/v6/latest/USD');
+                const data = await res.json();
+                if (data && data.rates && data.rates.ILS) {
+                    currentRateILS = data.rates.ILS;
+                    document.getElementById('exchange-rate-display').innerText = currentRateILS.toFixed(2);
+                    updateDashboard();
+                }
+            } catch (e) {
+                console.warn("Using fallback exchange rate.", e);
+            }
+        }
+        fetchLiveExchangeRate();
+
+        const portfolioRef = ref(db, 'portfolio');
+        const txRef = ref(db, 'transactions');
+
+        onValue(portfolioRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                portfolio = data;
+                totalShares = portfolio.bucketA.qty + portfolio.bucketB.qty;
+                updateDashboard();
+            }
+        });
+
+        onValue(txRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                renderTransactions(data);
+            }
+        });
+
+        function calculateNetValue(price, basis, qty, rate) {
+            const profitPerShare = Math.max(0, price - basis);
+            const afterTaxProfit = profitPerShare * 0.75; 
+            const netValuePerShareUSD = afterTaxProfit + basis;
+            return netValuePerShareUSD * qty * rate;
+        }
+
+        function getNetPerShareILS(price, basis, rate) {
+            return calculateNetValue(price, basis, 1, rate);
+        }
+
+        function updateDashboard() {
+            const valA = calculateNetValue(currentPriceUSD, portfolio.bucketA.basis, portfolio.bucketA.qty, currentRateILS);
+            const valB = calculateNetValue(currentPriceUSD, portfolio.bucketB.basis, portfolio.bucketB.qty, currentRateILS);
+            const totalNetILS = valA + valB;
+
+            document.getElementById('net-worth-ils').innerText = '₪' + Math.round(totalNetILS).toLocaleString();
+
+            let progressPct = (totalNetILS / houseTargetILS) * 100;
+            if (progressPct > 100) progressPct = 100;
+            document.getElementById('target-progress').style.width = `${progressPct}%`;
+            document.getElementById('target-percentage').innerText = `${progressPct.toFixed(1)}%`;
+        }
+
+        document.getElementById('stock-price-input').addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (val && val > 0) {
+                currentPriceUSD = val;
+                updateDashboard();
+            }
+        });
+
+        function renderTransactions(txMap) {
+            const container = document.getElementById('ledger-list');
+            const txList = Array.isArray(txMap) ? txMap : Object.values(txMap);
+
+            if (!txList || txList.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No transactions recorded.</p>`;
+                return;
+            }
+
+            container.innerHTML = txList.map((tx, index) => {
+                const key = tx.id || index;
+                const statusBg = tx.status === 'completed' ? 'bg-emerald-50 border-emerald-200' : 
+                                 tx.status === 'locked' ? 'bg-amber-50 border-amber-200' : 
+                                 'bg-slate-50 border-slate-200 italic';
+
+                return `
+                    <div class="p-3.5 rounded-xl border ${statusBg} flex flex-col gap-2 transition-all">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-sm text-slate-800">${tx.date}</span>
+                                <select onchange="window.updateTxStatus('${key}', this.value)" class="text-[10px] font-bold uppercase rounded-full px-2 py-0.5 border bg-white border-slate-300">
+                                    <option value="planned" ${tx.status === 'planned' ? 'selected' : ''}>⏳ Planned</option>
+                                    <option value="locked" ${tx.status === 'locked' ? 'selected' : ''}>🔒 Locked</option>
+                                    <option value="completed" ${tx.status === 'completed' ? 'selected' : ''}>🟢 Completed</option>
+                                </select>
+                            </div>
+                            <div class="font-mono font-bold text-slate-700 text-sm">
+                                ₪${Math.round(tx.qty * tx.price_usd * tx.rate_ils).toLocaleString()}
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-slate-500">
+                            <div><span class="font-mono font-semibold">${tx.qty.toLocaleString()}</span> shares @ $${tx.price_usd.toFixed(2)}</div>
+                            <div class="text-[10px] text-slate-400">Rate: ${tx.rate_ils}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.updateTxStatus = function(txKey, newStatus) {
+            const updates = {};
+            updates[`transactions/${txKey}/status`] = newStatus;
+            update(ref(db), updates);
+        };
+
+        document.getElementById('add-tx-btn').addEventListener('click', () => {
+            const newKey = 'tx_' + Date.now();
+            const newTx = {
+                id: newKey,
+                date: new Date().toISOString().split('T')[0],
+                status: 'planned',
+                bucket: 'low',
+                qty: 500,
+                price_usd: currentPriceUSD,
+                rate_ils: currentRateILS
+            };
+
+            const updates = {};
+            updates[`transactions/${newKey}`] = newTx;
+            update(ref(db), updates);
+        });
+
+        document.getElementById('calc-button').addEventListener('click', () => {
+            const target = parseFloat(document.getElementById('target-ils-input').value);
+            if (!target || target <= 0) return;
+
+            document.getElementById('calculator-results').classList.remove('hidden');
+
+            const netPerShareA_ILS = getNetPerShareILS(currentPriceUSD, portfolio.bucketA.basis, currentRateILS);
+            const netPerShareB_ILS = getNetPerShareILS(currentPriceUSD, portfolio.bucketB.basis, currentRateILS);
+
+            const reqSharesA = Math.ceil(target / netPerShareA_ILS);
+            const reqSharesB = Math.ceil(target / netPerShareB_ILS);
+
+            const pctA = ((reqSharesA / totalShares) * 100).toFixed(2);
+            const pctB = ((reqSharesB / totalShares) * 100).toFixed(2);
+
+            document.getElementById('req-bucket-a').innerText = `${reqSharesA.toLocaleString()} shares`;
+            document.getElementById('pct-bucket-a').innerText = `${pctA}% of total portfolio`;
+
+            document.getElementById('req-bucket-b').innerText = `${reqSharesB.toLocaleString()} shares`;
+            document.getElementById('pct-bucket-b').innerText = `${pctB}% of total portfolio`;
+        });
+    </script>
+
+    <!-- Register Service Worker for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(() => console.log('Service Worker Registered'))
+                    .catch((err) => console.warn('SW registration failed', err));
+            });
+        }
+    </script>
+</body>
+</html>
