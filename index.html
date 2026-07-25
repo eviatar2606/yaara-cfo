@@ -33,109 +33,109 @@
 <body class="bg-slate-100 min-h-screen text-slate-800 font-sans">
 
     <!-- Header / Stock & Exchange Rate Pulse -->
-    <header class="bg-indigo-600 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
-        <div class="flex items-center gap-2.5">
-            <img src="favicon.png" alt="Yaara CFO" class="w-8 h-8 rounded-lg shadow-sm border border-indigo-400/40">
+    <header class="bg-indigo-600 text-white p-3.5 sticky top-0 z-50 shadow-md flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <img src="favicon.png" alt="Yaara CFO" class="w-7 h-7 rounded-lg shadow-sm border border-indigo-400/40">
             <div>
-                <h1 class="text-xl font-extrabold tracking-tight leading-none">Yaara CFO</h1>
-                <span class="text-[10px] text-indigo-200 uppercase font-semibold tracking-wider">Equity & Asset Manager</span>
+                <h1 class="text-lg font-extrabold tracking-tight leading-none">Yaara CFO</h1>
+                <span class="text-[9px] text-indigo-200 uppercase font-semibold tracking-wider">Equity & Asset Manager</span>
             </div>
         </div>
-        <div class="flex items-center gap-2">
-            <div class="flex items-center gap-1 font-mono font-bold text-xs bg-indigo-700/60 px-2.5 py-1 rounded-lg border border-indigo-400/30">
+        <div class="flex items-center gap-1.5">
+            <div class="flex items-center gap-1 font-mono font-bold text-xs bg-indigo-700/60 px-2 py-0.5 rounded-lg border border-indigo-400/30">
                 <span class="text-emerald-300 font-bold">$</span>
                 <span id="header-stock-price-display" class="text-white">80.64</span>
             </div>
-            <div class="flex items-center gap-1 font-mono font-bold text-xs bg-indigo-700/60 px-2.5 py-1 rounded-lg border border-indigo-400/30">
+            <div class="flex items-center gap-1 font-mono font-bold text-xs bg-indigo-700/60 px-2 py-0.5 rounded-lg border border-indigo-400/30">
                 <span class="text-amber-300 font-bold">₪</span>
                 <span id="header-rate-display" class="text-white">3.05</span>
             </div>
         </div>
     </header>
 
-    <main class="p-4 max-w-lg mx-auto space-y-6 pb-24">
+    <main class="p-3 max-w-lg mx-auto space-y-4 pb-20">
         
-        <!-- PAGE 1: DASHBOARD -->
-        <div id="tab-dashboard" class="space-y-6">
+        <!-- PAGE 1: DASHBOARD (Ultra-compact so 80/20 fits at a single glance!) -->
+        <div id="tab-dashboard" class="space-y-3">
             <!-- Net Worth & Shares Card -->
-            <section class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200 text-center space-y-5">
+            <section class="glass-card rounded-2xl p-3.5 shadow-sm border border-slate-200 text-center space-y-3">
                 <!-- Net Worth Display -->
-                <div>
-                    <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Total Portfolio Net Worth (After Tax)</h2>
-                    <div class="text-4xl font-extrabold text-indigo-600 tracking-tight" id="net-worth-ils">₪0</div>
-                    <div class="text-xs text-slate-400 mt-1">Active USD/ILS Rate: <span id="exchange-rate-display" class="font-mono font-bold text-slate-600">3.05</span> ₪</div>
+                <div class="bg-gradient-to-br from-indigo-50/70 to-slate-50 p-2.5 rounded-xl border border-indigo-100/80">
+                    <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Total Portfolio Net Worth (After Tax)</h2>
+                    <div class="text-3xl font-black text-indigo-600 tracking-tight font-mono" id="net-worth-ils">₪0</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Active USD/ILS Rate: <span id="exchange-rate-display" class="font-mono font-bold text-slate-600">3.05</span> ₪</div>
                 </div>
 
-                <!-- Live Market Inputs & % Sliders Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                <!-- Live Market Inputs & % Sliders Grid (Side-by-Side) -->
+                <div class="grid grid-cols-2 gap-2 text-left">
                     <!-- JFROG Stock Price Control Box -->
-                    <div class="bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-100/90 rounded-xl p-3.5 shadow-sm space-y-3">
-                        <div class="flex items-center justify-between">
+                    <div class="bg-white border border-indigo-100 rounded-xl p-2.5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between gap-1">
                             <div>
-                                <div class="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-                                    JFROG Stock ($)
+                                <div class="text-[11px] font-extrabold text-indigo-950 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                                    JFROG ($)
                                 </div>
-                                <div class="text-[10px] text-slate-400">Base: $<span id="base-stock-price-display">80.64</span></div>
+                                <div class="text-[9px] text-slate-400">Base: $<span id="base-stock-price-display">80.64</span></div>
                             </div>
-                            <div class="flex items-center gap-1 bg-white border border-indigo-300 rounded-lg px-2 py-1 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500">
-                                <span class="font-mono font-bold text-indigo-600 text-sm">$</span>
-                                <input type="number" id="stock-price-input" step="0.01" class="w-14 font-mono font-bold text-sm text-slate-800 bg-transparent text-right outline-none" value="80.64">
+                            <div class="flex items-center gap-0.5 bg-slate-50 border border-indigo-200 rounded-md px-1.5 py-0.5">
+                                <span class="font-mono font-bold text-indigo-600 text-xs">$</span>
+                                <input type="number" id="stock-price-input" step="0.01" class="w-12 font-mono font-bold text-xs text-slate-800 bg-transparent text-right outline-none" value="80.64">
                             </div>
                         </div>
 
                         <!-- Stock Price Boost Slider -->
-                        <div class="space-y-1 bg-white/80 p-2 rounded-lg border border-indigo-100/80">
-                            <div class="flex justify-between items-center text-[10px] font-semibold text-slate-600">
-                                <span>Stock % Boost</span>
-                                <span id="stock-slider-val" class="font-mono font-bold text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded border border-indigo-200">+0%</span>
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between items-center text-[9px] font-semibold text-slate-500">
+                                <span>Boost</span>
+                                <span id="stock-slider-val" class="font-mono font-bold text-indigo-600">+0%</span>
                             </div>
                             <input type="range" id="stock-slider" min="0" max="100" value="0" step="1" 
-                                   class="w-full accent-indigo-600 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                                   class="w-full accent-indigo-600 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer">
                         </div>
                     </div>
 
                     <!-- USD/ILS Exchange Rate Control Box -->
-                    <div class="bg-gradient-to-br from-amber-50/70 to-slate-50 border border-amber-100/90 rounded-xl p-3.5 shadow-sm space-y-3">
-                        <div class="flex items-center justify-between">
+                    <div class="bg-white border border-amber-100 rounded-xl p-2.5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between gap-1">
                             <div>
-                                <div class="text-xs font-bold text-amber-950 flex items-center gap-1.5">
-                                    <span class="w-2 h-2 rounded-full bg-amber-500 inline-block animate-pulse"></span>
-                                    USD/ILS Rate (₪)
+                                <div class="text-[11px] font-extrabold text-amber-950 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block animate-pulse"></span>
+                                    Rate (₪)
                                 </div>
-                                <div class="text-[10px] text-slate-400">Base: <span id="base-rate-display">3.05</span> ₪</div>
+                                <div class="text-[9px] text-slate-400">Base: <span id="base-rate-display">3.05</span> ₪</div>
                             </div>
-                            <div class="flex items-center gap-1 bg-white border border-amber-300 rounded-lg px-2 py-1 shadow-sm focus-within:ring-2 focus-within:ring-amber-500">
-                                <span class="font-mono font-bold text-amber-600 text-sm">₪</span>
-                                <input type="number" id="exchange-rate-input" step="0.01" class="w-14 font-mono font-bold text-sm text-slate-800 bg-transparent text-right outline-none" value="3.05">
+                            <div class="flex items-center gap-0.5 bg-slate-50 border border-amber-200 rounded-md px-1.5 py-0.5">
+                                <span class="font-mono font-bold text-amber-600 text-xs">₪</span>
+                                <input type="number" id="exchange-rate-input" step="0.01" class="w-12 font-mono font-bold text-xs text-slate-800 bg-transparent text-right outline-none" value="3.05">
                             </div>
                         </div>
 
                         <!-- Exchange Rate Boost Slider -->
-                        <div class="space-y-1 bg-white/80 p-2 rounded-lg border border-amber-100/80">
-                            <div class="flex justify-between items-center text-[10px] font-semibold text-slate-600">
-                                <span>Rate % Boost</span>
-                                <span id="rate-slider-val" class="font-mono font-bold text-amber-600 bg-amber-50 px-1 py-0.5 rounded border border-amber-200">+0%</span>
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between items-center text-[9px] font-semibold text-slate-500">
+                                <span>Boost</span>
+                                <span id="rate-slider-val" class="font-mono font-bold text-amber-600">+0%</span>
                             </div>
                             <input type="range" id="rate-slider" min="0" max="50" value="0" step="1" 
-                                   class="w-full accent-amber-600 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                                   class="w-full accent-amber-600 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer">
                         </div>
                     </div>
                 </div>
                 
                 <!-- Remaining Shares Progress Bar -->
-                <div class="text-left space-y-2 pt-2 border-t border-slate-100">
-                    <div class="flex justify-between items-center text-xs font-bold text-slate-700">
-                        <span class="flex items-center gap-1.5">
-                            <i class="ph ph-chart-pie-slice text-indigo-600 text-base"></i>
+                <div class="text-left space-y-1 pt-1.5 border-t border-slate-100">
+                    <div class="flex justify-between items-center text-[11px] font-bold text-slate-700">
+                        <span class="flex items-center gap-1">
+                            <i class="ph ph-chart-pie-slice text-indigo-600 text-sm"></i>
                             Remaining Portfolio Shares
                         </span>
-                        <span id="shares-percentage" class="font-mono text-indigo-600 font-extrabold text-sm">0%</span>
+                        <span id="shares-percentage" class="font-mono text-indigo-600 font-extrabold text-xs">0%</span>
                     </div>
-                    <div class="w-full bg-slate-200/80 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-200/80">
-                        <div class="bg-gradient-to-r from-indigo-600 to-emerald-500 h-2.5 rounded-full transition-all duration-500 shadow-sm" id="shares-progress" style="width: 0%"></div>
+                    <div class="w-full bg-slate-200/80 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-200/80">
+                        <div class="bg-gradient-to-r from-indigo-600 to-emerald-500 h-1.5 rounded-full transition-all duration-500 shadow-sm" id="shares-progress" style="width: 0%"></div>
                     </div>
-                    <div class="flex justify-between items-center text-[11px] font-semibold text-slate-500">
+                    <div class="flex justify-between items-center text-[10px] font-semibold text-slate-500">
                         <span id="shares-count-display" class="font-mono text-slate-700">0 / 26,050 shares</span>
                         <span id="sold-shares-count-display" class="text-slate-400 font-mono">0 sold</span>
                     </div>
@@ -143,33 +143,33 @@
             </section>
 
             <!-- Liquidity Breakdown Card (80% / 20%) -->
-            <section class="grid grid-cols-2 gap-3">
-                <div class="glass-card rounded-2xl p-4 shadow-sm border border-emerald-100 bg-emerald-50/50 text-center">
-                    <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">לפריעה (80%)</div>
-                    <div class="text-xl font-black text-emerald-600 font-mono" id="vested-80-ils">₪0</div>
-                    <div class="text-[11px] text-slate-500 mt-1 font-mono" id="vested-80-shares">10,960 shares</div>
+            <section class="grid grid-cols-2 gap-2">
+                <div class="glass-card rounded-xl p-3 shadow-sm border border-emerald-100 bg-emerald-50/50 text-center">
+                    <div class="text-[10px] font-extrabold text-emerald-700 uppercase tracking-wider mb-0.5">לפריעה (80%)</div>
+                    <div class="text-lg font-black text-emerald-600 font-mono" id="vested-80-ils">₪0</div>
+                    <div class="text-[10px] text-slate-500 font-mono" id="vested-80-shares">10,960 shares</div>
                 </div>
 
-                <div class="glass-card rounded-2xl p-4 shadow-sm border border-amber-100 bg-amber-50/50 text-center">
-                    <div class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-1">לא לפריעה (20%)</div>
-                    <div class="text-xl font-black text-amber-600 font-mono" id="unvested-20-ils">₪0</div>
-                    <div class="text-[11px] text-slate-500 mt-1 font-mono" id="unvested-20-shares">2,740 shares</div>
+                <div class="glass-card rounded-xl p-3 shadow-sm border border-amber-100 bg-amber-50/50 text-center">
+                    <div class="text-[10px] font-extrabold text-amber-700 uppercase tracking-wider mb-0.5">לא לפריעה (20%)</div>
+                    <div class="text-lg font-black text-amber-600 font-mono" id="unvested-20-ils">₪0</div>
+                    <div class="text-[10px] text-slate-500 font-mono" id="unvested-20-shares">2,740 shares</div>
                 </div>
             </section>
         </div>
 
         <!-- PAGE 2: SELL & GOAL SIMULATOR -->
-        <div id="tab-simulator" class="space-y-6 hidden">
+        <div id="tab-simulator" class="space-y-4 hidden">
             <!-- Unified Sell & Goal Simulator Card -->
-            <section class="glass-card rounded-2xl p-6 shadow-sm border border-indigo-100 bg-gradient-to-b from-white to-indigo-50/30 space-y-5">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
-                            <i class="ph ph-calculator text-xl font-bold"></i>
+            <section class="glass-card rounded-2xl p-5 shadow-sm border border-indigo-100 bg-gradient-to-b from-white to-indigo-50/30 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+                            <i class="ph ph-calculator text-lg font-bold"></i>
                         </div>
                         <div>
                             <h2 class="text-base font-extrabold text-slate-800">Sell & Goal Simulator</h2>
-                            <p class="text-[11px] text-slate-500">Calculate sale proceeds or reverse target ₪ goals</p>
+                            <p class="text-[10px] text-slate-500">Calculate sale proceeds or reverse target ₪ goals</p>
                         </div>
                     </div>
                 </div>
@@ -242,12 +242,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="pt-2 flex justify-end">
-                        <button id="sim-add-tx-btn" class="w-full bg-indigo-600 text-white py-3 rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm flex items-center justify-center gap-1.5">
-                            <i class="ph ph-plus-circle font-bold text-base"></i> Add Sale to Transaction Ledger
-                        </button>
-                    </div>
                 </div>
 
                 <!-- SUB-TAB 2: REVERSE TARGET GOAL -->
@@ -288,14 +282,14 @@
         </div>
 
         <!-- PAGE 3: TRANSACTION LEDGER -->
-        <div id="tab-ledger" class="space-y-6 hidden">
-            <section class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200">
+        <div id="tab-ledger" class="space-y-4 hidden">
+            <section class="glass-card rounded-2xl p-5 shadow-sm border border-slate-200">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2">
                         <i class="ph ph-receipt text-2xl text-indigo-600"></i>
                         <div>
                             <h2 class="text-base font-extrabold text-slate-800">Transaction Ledger</h2>
-                            <p class="text-[11px] text-slate-500">Record of executed & planned sales</p>
+                            <p class="text-[10px] text-slate-500">Record of executed sales (Locked by default)</p>
                         </div>
                     </div>
                     <button id="add-tx-btn" class="bg-indigo-600 text-white px-3 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm flex items-center gap-1">
@@ -358,6 +352,8 @@
         let baseRateILS = 3.05;
         let rateSliderPct = 0;
         let currentRateILS = 3.05;
+
+        let unlockedTxMap = {}; // Tracks which transaction keys are unlocked for editing
 
         // Navigation tab switching
         window.switchMainTab = function(tabName) {
@@ -741,25 +737,17 @@
             recalcSellSimulation();
         });
 
-        document.getElementById('sim-add-tx-btn').addEventListener('click', () => {
-            if (simSharesCount <= 0) return;
-            const newKey = 'tx_' + Date.now();
-            const newTx = {
-                id: newKey,
-                date: new Date().toISOString().split('T')[0],
-                qty: simSharesCount,
-                price_usd: currentPriceUSD,
-                rate_ils: currentRateILS,
-                status: 'planned'
-            };
-
-            const updates = {};
-            updates[`transactions/${newKey}`] = newTx;
-            update(ref(db), updates);
-
-            // Switch to ledger tab to see the new planned transaction
-            window.switchMainTab('ledger');
-        });
+        window.toggleUnlockTx = function(key) {
+            if (unlockedTxMap[key]) {
+                delete unlockedTxMap[key];
+                renderTransactions(currentTransactionsData);
+            } else {
+                if (confirm("⚠️ EDIT COMPLETED TRANSACTION WARNING\n\nThis transaction has already been executed. Modifying historical sales will alter your total portfolio calculations.\n\nDo you want to unlock this transaction to edit it?")) {
+                    unlockedTxMap[key] = true;
+                    renderTransactions(currentTransactionsData);
+                }
+            }
+        };
 
         function renderTransactions(txMap) {
             const container = document.getElementById('ledger-list');
@@ -785,28 +773,32 @@
                     const qty = Number(tx.qty) || 0;
                     const price = Number(tx.price_usd) || 0;
                     const rate = Number(tx.rate_ils) || currentRateILS || 3.05;
-                    const status = tx.status || 'planned';
+                    const isUnlocked = !!unlockedTxMap[key];
+                    const isDisabledAttr = (!isUnlocked) ? 'disabled readonly' : '';
 
-                    const statusBg = status === 'completed' ? 'bg-emerald-50/80 border-emerald-200' : 
-                                     status === 'locked' ? 'bg-amber-50/80 border-amber-200' : 
-                                     'bg-slate-50 border-slate-200';
-
+                    const statusBg = isUnlocked ? 'bg-amber-50/90 border-amber-300' : 'bg-emerald-50/70 border-emerald-200/90';
                     const totalILS = Math.round(qty * price * rate);
 
                     return `
-                        <div class="p-3.5 rounded-xl border ${statusBg} flex flex-col gap-3 transition-all shadow-sm">
+                        <div class="p-3.5 rounded-xl border ${statusBg} flex flex-col gap-2.5 transition-all shadow-sm">
                             <div class="flex justify-between items-center gap-2">
-                                <input type="text" value="${date}" onchange="window.updateTxField('${key}', 'date', this.value)" 
-                                       placeholder="Date (e.g. 2026-06-29)"
-                                       class="font-bold text-sm text-slate-800 bg-transparent border-b border-dashed border-slate-300 focus:outline-none focus:border-indigo-500 w-32 px-0.5">
+                                <div class="flex items-center gap-1.5">
+                                    <input type="text" value="${date}" ${isDisabledAttr} onchange="window.updateTxField('${key}', 'date', this.value)" 
+                                           placeholder="YYYY-MM-DD"
+                                           class="font-bold text-sm text-slate-800 bg-transparent border-b border-dashed border-slate-300 focus:outline-none focus:border-indigo-500 w-28 px-0.5 disabled:opacity-80">
+                                </div>
                                 
                                 <div class="flex items-center gap-1.5">
-                                    <select onchange="window.updateTxField('${key}', 'status', this.value)" 
-                                            class="text-xs font-bold uppercase rounded-lg px-2 py-1 border bg-white border-slate-300 shadow-sm focus:ring-2 focus:ring-indigo-500">
-                                        <option value="planned" ${status === 'planned' ? 'selected' : ''}>⏳ Planned</option>
-                                        <option value="locked" ${status === 'locked' ? 'selected' : ''}>🔒 Locked</option>
-                                        <option value="completed" ${status === 'completed' ? 'selected' : ''}>🟢 Completed</option>
-                                    </select>
+                                    ${!isUnlocked ? `
+                                        <button onclick="window.toggleUnlockTx('${key}')" class="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm">
+                                            <i class="ph ph-lock-key font-bold text-amber-600 text-xs"></i> Locked
+                                        </button>
+                                    ` : `
+                                        <button onclick="window.toggleUnlockTx('${key}')" class="text-[11px] font-bold text-amber-700 bg-amber-100 border border-amber-300 px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm" title="Lock & Revert Editing">
+                                            <i class="ph ph-lock-key-open font-bold text-amber-700 text-xs"></i> Revert / Lock
+                                        </button>
+                                    `}
+
                                     <button onclick="window.deleteTx('${key}')" class="text-slate-400 hover:text-red-500 p-1 transition" title="Delete Sale">
                                         <i class="ph ph-trash text-base"></i>
                                     </button>
@@ -815,19 +807,19 @@
 
                             <div class="grid grid-cols-3 gap-2 text-xs">
                                 <div>
-                                    <label class="block text-[10px] uppercase font-semibold text-slate-400 mb-0.5">Shares</label>
-                                    <input type="number" value="${qty}" onchange="window.updateTxField('${key}', 'qty', this.value)"
-                                           class="w-full bg-white rounded-lg border border-slate-200 p-1.5 font-mono font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <label class="block text-[9px] uppercase font-bold text-slate-400 mb-0.5">Shares</label>
+                                    <input type="number" value="${qty}" ${isDisabledAttr} onchange="window.updateTxField('${key}', 'qty', this.value)"
+                                           class="w-full bg-white rounded-lg border border-slate-200 p-1.5 font-mono font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:bg-slate-100 disabled:text-slate-600">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] uppercase font-semibold text-slate-400 mb-0.5">Price ($)</label>
-                                    <input type="number" step="0.01" value="${price}" onchange="window.updateTxField('${key}', 'price_usd', this.value)"
-                                           class="w-full bg-white rounded-lg border border-slate-200 p-1.5 font-mono font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <label class="block text-[9px] uppercase font-bold text-slate-400 mb-0.5">Price ($)</label>
+                                    <input type="number" step="0.01" value="${price}" ${isDisabledAttr} onchange="window.updateTxField('${key}', 'price_usd', this.value)"
+                                           class="w-full bg-white rounded-lg border border-slate-200 p-1.5 font-mono font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:bg-slate-100 disabled:text-slate-600">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] uppercase font-semibold text-slate-400 mb-0.5">Rate (₪)</label>
-                                    <input type="number" step="0.01" value="${rate}" onchange="window.updateTxField('${key}', 'rate_ils', this.value)"
-                                           class="w-full bg-white rounded-lg border border-slate-200 p-1.5 font-mono font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <label class="block text-[9px] uppercase font-bold text-slate-400 mb-0.5">Rate (₪)</label>
+                                    <input type="number" step="0.01" value="${rate}" ${isDisabledAttr} onchange="window.updateTxField('${key}', 'rate_ils', this.value)"
+                                           class="w-full bg-white rounded-lg border border-slate-200 p-1.5 font-mono font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:bg-slate-100 disabled:text-slate-600">
                                 </div>
                             </div>
 
@@ -835,7 +827,7 @@
                                 <div class="font-mono font-bold text-indigo-700 text-sm">
                                     ₪${totalILS.toLocaleString()}
                                 </div>
-                                ${status === 'completed' ? `<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">Eats ${qty.toLocaleString()} shares</span>` : ''}
+                                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">Completed (${qty.toLocaleString()} shares)</span>
                             </div>
                         </div>
                     `;
@@ -856,12 +848,8 @@
             update(ref(db), updates);
         };
 
-        window.updateTxStatus = function(txKey, newStatus) {
-            window.updateTxField(txKey, 'status', newStatus);
-        };
-
         window.deleteTx = function(txKey) {
-            if (confirm('Are you sure you want to delete this transaction?')) {
+            if (confirm('⚠️ WARNING: Deleting a transaction will restore its shares back into your active portfolio.\n\nAre you sure you want to delete this sale?')) {
                 const updates = {};
                 updates[`transactions/${txKey}`] = null;
                 update(ref(db), updates);
@@ -869,11 +857,14 @@
         };
 
         document.getElementById('add-tx-btn').addEventListener('click', () => {
+            const confirmed = confirm("⚠️ RECORD COMPLETED TRANSACTION WARNING\n\nAdding a sale records a COMPLETED transaction that will immediately deduct shares from your active portfolio and update total net worth.\n\nAre you sure you want to add a new completed transaction?");
+            if (!confirmed) return;
+
             const newKey = 'tx_' + Date.now();
             const newTx = {
                 id: newKey,
                 date: new Date().toISOString().split('T')[0],
-                status: 'planned',
+                status: 'completed',
                 qty: 500,
                 price_usd: currentPriceUSD,
                 rate_ils: currentRateILS
