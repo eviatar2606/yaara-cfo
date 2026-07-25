@@ -61,9 +61,13 @@
             <section class="glass-card rounded-2xl p-3.5 shadow-sm border border-slate-200 text-center space-y-3">
                 <!-- Net Worth Display -->
                 <div class="bg-gradient-to-br from-indigo-50/70 to-slate-50 p-2.5 rounded-xl border border-indigo-100/80">
-                    <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Total Portfolio Net Worth (After Tax)</h2>
+                    <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Remaining Portfolio Net Worth (After Tax)</h2>
                     <div class="text-3xl font-black text-indigo-600 tracking-tight font-mono" id="net-worth-ils">₪0</div>
-                    <div class="text-[10px] text-slate-400 mt-0.5">Active USD/ILS Rate: <span id="exchange-rate-display" class="font-mono font-bold text-slate-600">3.05</span> ₪</div>
+                    <div class="flex items-center justify-center gap-2 text-[10px] text-slate-500 mt-0.5 font-semibold flex-wrap">
+                        <div>Rate: <span id="exchange-rate-display" class="font-mono font-bold text-slate-700">3.05</span> ₪</div>
+                        <div class="text-slate-300">•</div>
+                        <div>Realized Cash: <span id="realized-cash-display" class="font-mono font-bold text-emerald-600">₪0</span></div>
+                    </div>
                 </div>
 
                 <!-- Live Market Inputs & % Sliders Grid (Side-by-Side) -->
@@ -669,12 +673,17 @@
 
             const valA = calculateNetValue(currentPriceUSD, portfolio.bucketA.basis, remainingA, currentRateILS);
             const valB = calculateNetValue(currentPriceUSD, portfolio.bucketB.basis, remainingB, currentRateILS);
-            const totalNetILS = valA + valB + completedCashILS;
+            
+            // Main Net Worth reflects the existing unsold shares in remaining portfolio
+            const remainingPortfolioNetILS = valA + valB;
 
-            document.getElementById('net-worth-ils').innerText = '₪' + Math.round(totalNetILS).toLocaleString();
+            document.getElementById('net-worth-ils').innerText = '₪' + Math.round(remainingPortfolioNetILS).toLocaleString();
 
-            const net80 = totalNetILS * 0.80;
-            const net20 = totalNetILS * 0.20;
+            const realizedCashEl = document.getElementById('realized-cash-display');
+            if (realizedCashEl) realizedCashEl.innerText = '₪' + Math.round(completedCashILS).toLocaleString();
+
+            const net80 = remainingPortfolioNetILS * 0.80;
+            const net20 = remainingPortfolioNetILS * 0.20;
             const shares80 = Math.round(remainingShares * 0.80);
             const shares20 = Math.round(remainingShares * 0.20);
 
