@@ -228,17 +228,22 @@
             "tx_12": { id: "tx_12", date: "Jul 2026", qty: 500, price_usd: 80.64, rate_ils: 3.07, status: "planned" }
         };
 
+        let currentTransactionsData = {};
+
         onValue(txRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data && Object.keys(data).length > 0) {
+            const data = snapshot.val() || {};
+            currentTransactionsData = data;
+            if (Object.keys(data).length > 0) {
                 renderTransactions(data);
             } else {
                 set(txRef, defaultTransactions);
                 renderTransactions(defaultTransactions);
             }
+            updateDashboard();
         }, (error) => {
             console.error("Firebase transaction read error:", error);
             renderTransactions(defaultTransactions);
+            updateDashboard();
         });
 
         function calculateNetValue(price, basis, qty, rate) {
@@ -253,19 +258,44 @@
         }
 
         function updateDashboard() {
-            const valA = calculateNetValue(currentPriceUSD, portfolio.bucketA.basis, portfolio.bucketA.qty, currentRateILS);
-            const valB = calculateNetValue(currentPriceUSD, portfolio.bucketB.basis, portfolio.bucketB.qty, currentRateILS);
-            const totalNetILS = valA + valB;
+            let completedShares = 0;
+            let completedCashILS = 0;
 
-            totalShares = portfolio.bucketA.qty + portfolio.bucketB.qty;
+            const txEntries = Array.isArray(currentTransactionsData) 
+                ? currentTransactionsData 
+                : Object.values(currentTransactionsData || {});
+
+            txEntries.forEach(tx => {
+                if (tx && tx.status === 'completed') {
+                    const qty = Number(tx.qty) || 0;
+                    const price = Number(tx.price_usd) || 0;
+                    const rate = Number(tx.rate_ils) || currentRateILS;
+                    completedShares += qty;
+                    completedCashILS += (qty * price * rate);
+                }
+            });
+
+            const INITIAL_TOTAL_SHARES = 13700;
+            const remainingShares = Math.max(0, INITIAL_TOTAL_SHARES - completedShares);
+            totalShares = remainingShares;
+
+            // Deduct completed shares from Bucket B first (initial 13,100) then Bucket A (initial 600)
+            let remainingB = Math.max(0, 13100 - completedShares);
+            let remainingA = completedShares > 13100 
+                ? Math.max(0, 600 - (completedShares - 13100)) 
+                : 600;
+
+            const valA = calculateNetValue(currentPriceUSD, portfolio.bucketA.basis, remainingA, currentRateILS);
+            const valB = calculateNetValue(currentPriceUSD, portfolio.bucketB.basis, remainingB, currentRateILS);
+            const totalNetILS = valA + valB + completedCashILS;
 
             document.getElementById('net-worth-ils').innerText = '₪' + Math.round(totalNetILS).toLocaleString();
 
-            // 80% / 20% Breakdown Calculations (Total 13,700 shares)
+            // 80% / 20% Breakdown Calculations based on Remaining Active Shares
             const net80 = totalNetILS * 0.80;
             const net20 = totalNetILS * 0.20;
-            const shares80 = Math.round(totalShares * 0.80);
-            const shares20 = Math.round(totalShares * 0.20);
+            const shares80 = Math.round(remainingShares * 0.80);
+            const shares20 = Math.round(remainingShares * 0.20);
 
             const el80 = document.getElementById('vested-80-ils');
             if (el80) el80.innerText = '₪' + Math.round(net80).toLocaleString();
@@ -313,36 +343,61 @@
                 }
 
                 container.innerHTML = validEntries.map(({ key, tx }) => {
-                    const date = tx.date || 'N/A';
+                    const date = tx.date || '';
                     const qty = Number(tx.qty) || 0;
                     const price = Number(tx.price_usd) || 0;
                     const rate = Number(tx.rate_ils) || currentRateILS || 3.07;
                     const status = tx.status || 'planned';
 
-                    const statusBg = status === 'completed' ? 'bg-emerald-50 border-emerald-200' : 
-                                     status === 'locked' ? 'bg-amber-50 border-amber-200' : 
-                                     'bg-slate-50 border-slate-200 italic';
+                    const statusBg = status === 'completed' ? 'bg-emerald-50/80 border-emerald-200' : 
+                                     status === 'locked' ? 'bg-amber-50/80 border-amber-200' : 
+                                     'bg-slate-50 border-slate-200';
 
                     const totalILS = Math.round(qty * price * rate);
 
                     return `
-                        <div class="p-3.5 rounded-xl border ${statusBg} flex flex-col gap-2 transition-all">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <span class="font-bold text-sm text-slate-800">${date}</span>
-                                    <select onchange="window.updateTxStatus('${key}', this.value)" class="text-[10px] font-bold uppercase rounded-full px-2 py-0.5 border bg-white border-slate-300">
+                        <div class="p-3.5 rounded-xl border ${statusBg} flex flex-col gap-3 transition-all shadow-sm">
+                            <div class="flex justify-between items-center gap-2">
+                                <input type="text" value="${date}" onchange="window.updateTxField('${key}', 'date', this.value)" 
+                                       placeholder="Date (e.g. Sep 2022)"
+                                       class="font-bold text-sm text-slate-800 bg-transparent border-b border-dashed border-slate-300 focus:outline-none focus:border-indigo-500 w-32 px-0.5">
+                                
+                                <div class="flex items-center gap-1.5">
+                                    <select onchange="window.updateTxField('${key}', 'status', this.value)" 
+                                            class="text-xs font-bold uppercase rounded-lg px-2 py-1 border bg-white border-slate-300 shadow-sm focus:ring-2 focus:ring-indigo-500">
                                         <option value="planned" ${status === 'planned' ? 'selected' : ''}>⏳ Planned</option>
                                         <option value="locked" ${status === 'locked' ? 'selected' : ''}>🔒 Locked</option>
                                         <option value="completed" ${status === 'completed' ? 'selected' : ''}>🟢 Completed</option>
                                     </select>
-                                </div>
-                                <div class="font-mono font-bold text-slate-700 text-sm">
-                                    ₪${totalILS.toLocaleString()}
+                                    <button onclick="window.deleteTx('${key}')" class="text-slate-400 hover:text-red-500 p-1 transition" title="Delete Sale">
+                                        <i class="ph ph-trash text-base"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="flex justify-between items-center text-xs text-slate-500">
-                                <div><span class="font-mono font-semibold">${qty.toLocaleString()}</span> shares @ $${price.toFixed(2)}</div>
-                                <div class="text-[10px] text-slate-400">Rate: ${rate}</div>
+
+                            <div class="grid grid-cols-3 gap-2 text-xs">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-semibold text-slate-400 mb-0.5">Shares</label>
+                                    <input type="number" value="${qty}" onchange="window.updateTxField('${key}', 'qty', this.value)"
+                                           class="w-full bg-white rounded-lg border border-slate-200 p-1.5 font-mono font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] uppercase font-semibold text-slate-400 mb-0.5">Price ($)</label>
+                                    <input type="number" step="0.01" value="${price}" onchange="window.updateTxField('${key}', 'price_usd', this.value)"
+                                           class="w-full bg-white rounded-lg border border-slate-200 p-1.5 font-mono font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] uppercase font-semibold text-slate-400 mb-0.5">Rate (₪)</label>
+                                    <input type="number" step="0.01" value="${rate}" onchange="window.updateTxField('${key}', 'rate_ils', this.value)"
+                                           class="w-full bg-white rounded-lg border border-slate-200 p-1.5 font-mono font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-center text-xs pt-1 border-t border-slate-200/60">
+                                <div class="font-mono font-bold text-indigo-700 text-sm">
+                                    ₪${totalILS.toLocaleString()}
+                                </div>
+                                ${status === 'completed' ? `<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">Eats ${qty.toLocaleString()} shares</span>` : ''}
                             </div>
                         </div>
                     `;
@@ -353,10 +408,26 @@
             }
         }
 
-        window.updateTxStatus = function(txKey, newStatus) {
+        window.updateTxField = function(txKey, field, rawValue) {
+            let value = rawValue;
+            if (field === 'qty' || field === 'price_usd' || field === 'rate_ils') {
+                value = parseFloat(rawValue) || 0;
+            }
             const updates = {};
-            updates[`transactions/${txKey}/status`] = newStatus;
+            updates[`transactions/${txKey}/${field}`] = value;
             update(ref(db), updates);
+        };
+
+        window.updateTxStatus = function(txKey, newStatus) {
+            window.updateTxField(txKey, 'status', newStatus);
+        };
+
+        window.deleteTx = function(txKey) {
+            if (confirm('Are you sure you want to delete this transaction?')) {
+                const updates = {};
+                updates[`transactions/${txKey}`] = null;
+                update(ref(db), updates);
+            }
         };
 
         document.getElementById('add-tx-btn').addEventListener('click', () => {
