@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Yaara CFO</title>
 
+    <!-- Cache Control Meta Tags to Force Fresh Content -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#4f46e5">
@@ -474,12 +479,19 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then((reg) => {
-                        console.log('Service Worker Registered');
-                        reg.update();
-                    })
-                    .catch((err) => console.warn('SW registration failed', err));
+                navigator.serviceWorker.register('/sw.js').then((reg) => {
+                    reg.onupdatefound = () => {
+                        const worker = reg.installing;
+                        if (worker) {
+                            worker.onstatechange = () => {
+                                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    window.location.reload();
+                                }
+                            };
+                        }
+                    };
+                    reg.update();
+                }).catch((err) => console.warn('SW registration failed', err));
             });
         }
     </script>
