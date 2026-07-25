@@ -30,7 +30,8 @@
         .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen text-slate-800 font-sans pb-12">
+<body class="bg-slate-100 min-h-screen text-slate-800 font-sans">
+
     <!-- Header / Stock & Exchange Rate Pulse -->
     <header class="bg-indigo-600 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
         <div class="flex items-center gap-2.5">
@@ -51,241 +52,279 @@
             </div>
         </div>
     </header>
-    <main class="p-4 max-w-lg mx-auto space-y-6">
+
+    <main class="p-4 max-w-lg mx-auto space-y-6 pb-24">
         
-        <!-- Net Worth & Shares Card -->
-        <section class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200 text-center space-y-5">
-            <!-- Net Worth Display -->
-            <div>
-                <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Total Portfolio Net Worth (After Tax)</h2>
-                <div class="text-4xl font-extrabold text-indigo-600 tracking-tight" id="net-worth-ils">₪0</div>
-                <div class="text-xs text-slate-400 mt-1">Active USD/ILS Rate: <span id="exchange-rate-display" class="font-mono font-bold text-slate-600">3.05</span> ₪</div>
-            </div>
+        <!-- PAGE 1: DASHBOARD -->
+        <div id="tab-dashboard" class="space-y-6">
+            <!-- Net Worth & Shares Card -->
+            <section class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200 text-center space-y-5">
+                <!-- Net Worth Display -->
+                <div>
+                    <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Total Portfolio Net Worth (After Tax)</h2>
+                    <div class="text-4xl font-extrabold text-indigo-600 tracking-tight" id="net-worth-ils">₪0</div>
+                    <div class="text-xs text-slate-400 mt-1">Active USD/ILS Rate: <span id="exchange-rate-display" class="font-mono font-bold text-slate-600">3.05</span> ₪</div>
+                </div>
 
-            <!-- Live Market Inputs & % Sliders Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                <!-- Live Market Inputs & % Sliders Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                    <!-- JFROG Stock Price Control Box -->
+                    <div class="bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-100/90 rounded-xl p-3.5 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                                    JFROG Stock ($)
+                                </div>
+                                <div class="text-[10px] text-slate-400">Base: $<span id="base-stock-price-display">80.64</span></div>
+                            </div>
+                            <div class="flex items-center gap-1 bg-white border border-indigo-300 rounded-lg px-2 py-1 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500">
+                                <span class="font-mono font-bold text-indigo-600 text-sm">$</span>
+                                <input type="number" id="stock-price-input" step="0.01" class="w-14 font-mono font-bold text-sm text-slate-800 bg-transparent text-right outline-none" value="80.64">
+                            </div>
+                        </div>
+
+                        <!-- Stock Price Boost Slider -->
+                        <div class="space-y-1 bg-white/80 p-2 rounded-lg border border-indigo-100/80">
+                            <div class="flex justify-between items-center text-[10px] font-semibold text-slate-600">
+                                <span>Stock % Boost</span>
+                                <span id="stock-slider-val" class="font-mono font-bold text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded border border-indigo-200">+0%</span>
+                            </div>
+                            <input type="range" id="stock-slider" min="0" max="100" value="0" step="1" 
+                                   class="w-full accent-indigo-600 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- USD/ILS Exchange Rate Control Box -->
+                    <div class="bg-gradient-to-br from-amber-50/70 to-slate-50 border border-amber-100/90 rounded-xl p-3.5 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500 inline-block animate-pulse"></span>
+                                    USD/ILS Rate (₪)
+                                </div>
+                                <div class="text-[10px] text-slate-400">Base: <span id="base-rate-display">3.05</span> ₪</div>
+                            </div>
+                            <div class="flex items-center gap-1 bg-white border border-amber-300 rounded-lg px-2 py-1 shadow-sm focus-within:ring-2 focus-within:ring-amber-500">
+                                <span class="font-mono font-bold text-amber-600 text-sm">₪</span>
+                                <input type="number" id="exchange-rate-input" step="0.01" class="w-14 font-mono font-bold text-sm text-slate-800 bg-transparent text-right outline-none" value="3.05">
+                            </div>
+                        </div>
+
+                        <!-- Exchange Rate Boost Slider -->
+                        <div class="space-y-1 bg-white/80 p-2 rounded-lg border border-amber-100/80">
+                            <div class="flex justify-between items-center text-[10px] font-semibold text-slate-600">
+                                <span>Rate % Boost</span>
+                                <span id="rate-slider-val" class="font-mono font-bold text-amber-600 bg-amber-50 px-1 py-0.5 rounded border border-amber-200">+0%</span>
+                            </div>
+                            <input type="range" id="rate-slider" min="0" max="50" value="0" step="1" 
+                                   class="w-full accent-amber-600 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                </div>
                 
-                <!-- JFROG Stock Price Control Box -->
-                <div class="bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-100/90 rounded-xl p-3.5 shadow-sm space-y-3">
-                    <div class="flex items-center justify-between">
+                <!-- Remaining Shares Progress Bar -->
+                <div class="text-left space-y-2 pt-2 border-t border-slate-100">
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+                        <span class="flex items-center gap-1.5">
+                            <i class="ph ph-chart-pie-slice text-indigo-600 text-base"></i>
+                            Remaining Portfolio Shares
+                        </span>
+                        <span id="shares-percentage" class="font-mono text-indigo-600 font-extrabold text-sm">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-200/80 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-200/80">
+                        <div class="bg-gradient-to-r from-indigo-600 to-emerald-500 h-2.5 rounded-full transition-all duration-500 shadow-sm" id="shares-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="flex justify-between items-center text-[11px] font-semibold text-slate-500">
+                        <span id="shares-count-display" class="font-mono text-slate-700">0 / 26,050 shares</span>
+                        <span id="sold-shares-count-display" class="text-slate-400 font-mono">0 sold</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Liquidity Breakdown Card (80% / 20%) -->
+            <section class="grid grid-cols-2 gap-3">
+                <div class="glass-card rounded-2xl p-4 shadow-sm border border-emerald-100 bg-emerald-50/50 text-center">
+                    <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">לפריעה (80%)</div>
+                    <div class="text-xl font-black text-emerald-600 font-mono" id="vested-80-ils">₪0</div>
+                    <div class="text-[11px] text-slate-500 mt-1 font-mono" id="vested-80-shares">10,960 shares</div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-4 shadow-sm border border-amber-100 bg-amber-50/50 text-center">
+                    <div class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-1">לא לפריעה (20%)</div>
+                    <div class="text-xl font-black text-amber-600 font-mono" id="unvested-20-ils">₪0</div>
+                    <div class="text-[11px] text-slate-500 mt-1 font-mono" id="unvested-20-shares">2,740 shares</div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PAGE 2: SELL & GOAL SIMULATOR -->
+        <div id="tab-simulator" class="space-y-6 hidden">
+            <!-- Unified Sell & Goal Simulator Card -->
+            <section class="glass-card rounded-2xl p-6 shadow-sm border border-indigo-100 bg-gradient-to-b from-white to-indigo-50/30 space-y-5">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+                            <i class="ph ph-calculator text-xl font-bold"></i>
+                        </div>
                         <div>
-                            <div class="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-                                JFROG Stock ($)
-                            </div>
-                            <div class="text-[10px] text-slate-400">Base: $<span id="base-stock-price-display">80.64</span></div>
-                        </div>
-                        <div class="flex items-center gap-1 bg-white border border-indigo-300 rounded-lg px-2 py-1 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500">
-                            <span class="font-mono font-bold text-indigo-600 text-sm">$</span>
-                            <input type="number" id="stock-price-input" step="0.01" class="w-14 font-mono font-bold text-sm text-slate-800 bg-transparent text-right outline-none" value="80.64">
+                            <h2 class="text-base font-extrabold text-slate-800">Sell & Goal Simulator</h2>
+                            <p class="text-[11px] text-slate-500">Calculate sale proceeds or reverse target ₪ goals</p>
                         </div>
                     </div>
-
-                    <!-- Stock Price Boost Slider -->
-                    <div class="space-y-1 bg-white/80 p-2 rounded-lg border border-indigo-100/80">
-                        <div class="flex justify-between items-center text-[10px] font-semibold text-slate-600">
-                            <span>Stock % Boost</span>
-                            <span id="stock-slider-val" class="font-mono font-bold text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded border border-indigo-200">+0%</span>
-                        </div>
-                        <input type="range" id="stock-slider" min="0" max="100" value="0" step="1" 
-                               class="w-full accent-indigo-600 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
-                    </div>
                 </div>
 
-                <!-- USD/ILS Exchange Rate Control Box -->
-                <div class="bg-gradient-to-br from-amber-50/70 to-slate-50 border border-amber-100/90 rounded-xl p-3.5 shadow-sm space-y-3">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="text-xs font-bold text-amber-950 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-amber-500 inline-block animate-pulse"></span>
-                                USD/ILS Rate (₪)
-                            </div>
-                            <div class="text-[10px] text-slate-400">Base: <span id="base-rate-display">3.05</span> ₪</div>
-                        </div>
-                        <div class="flex items-center gap-1 bg-white border border-amber-300 rounded-lg px-2 py-1 shadow-sm focus-within:ring-2 focus-within:ring-amber-500">
-                            <span class="font-mono font-bold text-amber-600 text-sm">₪</span>
-                            <input type="number" id="exchange-rate-input" step="0.01" class="w-14 font-mono font-bold text-sm text-slate-800 bg-transparent text-right outline-none" value="3.05">
-                        </div>
-                    </div>
-
-                    <!-- Exchange Rate Boost Slider -->
-                    <div class="space-y-1 bg-white/80 p-2 rounded-lg border border-amber-100/80">
-                        <div class="flex justify-between items-center text-[10px] font-semibold text-slate-600">
-                            <span>Rate % Boost</span>
-                            <span id="rate-slider-val" class="font-mono font-bold text-amber-600 bg-amber-50 px-1 py-0.5 rounded border border-amber-200">+0%</span>
-                        </div>
-                        <input type="range" id="rate-slider" min="0" max="50" value="0" step="1" 
-                               class="w-full accent-amber-600 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
-                    </div>
-                </div>
-
-            </div>
-            
-            <!-- Remaining Shares Progress Bar -->
-            <div class="text-left space-y-2 pt-2 border-t border-slate-100">
-                <div class="flex justify-between items-center text-xs font-bold text-slate-700">
-                    <span class="flex items-center gap-1.5">
-                        <i class="ph ph-chart-pie-slice text-indigo-600 text-base"></i>
-                        Remaining Portfolio Shares
-                    </span>
-                    <span id="shares-percentage" class="font-mono text-indigo-600 font-extrabold text-sm">0%</span>
-                </div>
-                <div class="w-full bg-slate-200/80 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-200/80">
-                    <div class="bg-gradient-to-r from-indigo-600 to-emerald-500 h-2.5 rounded-full transition-all duration-500 shadow-sm" id="shares-progress" style="width: 0%"></div>
-                </div>
-                <div class="flex justify-between items-center text-[11px] font-semibold text-slate-500">
-                    <span id="shares-count-display" class="font-mono text-slate-700">0 / 26,050 shares</span>
-                    <span id="sold-shares-count-display" class="text-slate-400 font-mono">0 sold</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Quick Sell Simulation Module -->
-        <section class="glass-card rounded-2xl p-6 shadow-sm border border-indigo-100 bg-gradient-to-b from-white to-indigo-50/30 space-y-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
-                        <i class="ph ph-trend-up text-lg font-bold"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-base font-extrabold text-slate-800">Quick Sell Simulator</h2>
-                        <p class="text-[11px] text-slate-500">Simulate selling shares or % of portfolio live</p>
-                    </div>
-                </div>
-                <span class="text-[10px] font-bold text-indigo-700 bg-indigo-100/80 px-2 py-1 rounded-full border border-indigo-200">Interactive</span>
-            </div>
-
-            <!-- Preset Buttons & Quick Mode -->
-            <div class="space-y-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
-                <!-- Mode Selection Pills -->
-                <div class="flex justify-between items-center text-xs">
-                    <span class="font-bold text-slate-700">Select Sale Amount</span>
-                    <div class="flex gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-                        <button id="sim-mode-qty" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition bg-white text-indigo-600 shadow-sm">Exact Qty</button>
-                        <button id="sim-mode-pct" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition text-slate-500 hover:text-slate-700">% Portfolio</button>
-                    </div>
-                </div>
-
-                <!-- Input Row -->
-                <div class="flex items-center gap-2">
-                    <div class="relative flex-1">
-                        <input type="number" id="sim-amount-input" value="100" placeholder="Number of shares" 
-                               class="w-full rounded-xl border-slate-300 border p-3 pr-20 text-base font-mono font-bold focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm">
-                        <span id="sim-amount-unit" class="absolute right-3.5 top-3.5 text-xs font-bold text-slate-400 font-mono">SHARES</span>
-                    </div>
-                    <button id="sim-apply-btn" class="bg-indigo-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-indigo-700 active:bg-indigo-800 transition shadow-sm flex items-center gap-1.5 whitespace-nowrap">
-                        <i class="ph ph-lightning text-base"></i> Simulate
+                <!-- Sub-Tab Pill Switcher -->
+                <div class="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
+                    <button id="sim-tab-sell" onclick="window.switchSimSubTab('sell')" class="py-2 rounded-lg bg-white text-indigo-600 shadow-sm transition flex items-center justify-center gap-1.5">
+                        <i class="ph ph-lightning text-sm"></i> Sell Amount / %
+                    </button>
+                    <button id="sim-tab-goal" onclick="window.switchSimSubTab('goal')" class="py-2 rounded-lg text-slate-500 hover:text-slate-700 transition flex items-center justify-center gap-1.5">
+                        <i class="ph ph-target text-sm"></i> Target ₪ Goal
                     </button>
                 </div>
 
-                <!-- Quick Percentage Buttons -->
-                <div class="flex items-center gap-1.5 pt-1">
-                    <span class="text-[10px] uppercase font-bold text-slate-400 mr-0.5">Quick:</span>
-                    <button onclick="window.setSimPreset('shares', 100)" class="flex-1 py-1 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">100 sh</button>
-                    <button onclick="window.setSimPreset('shares', 500)" class="flex-1 py-1 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">500 sh</button>
-                    <button onclick="window.setSimPreset('pct', 5)" class="flex-1 py-1 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">5%</button>
-                    <button onclick="window.setSimPreset('pct', 10)" class="flex-1 py-1 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">10%</button>
-                    <button onclick="window.setSimPreset('pct', 20)" class="flex-1 py-1 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">20%</button>
-                </div>
-            </div>
+                <!-- SUB-TAB 1: SELL AMOUNT / % -->
+                <div id="sim-sec-sell" class="space-y-4">
+                    <div class="space-y-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-slate-700">Select Sale Amount</span>
+                            <div class="flex gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                                <button id="sim-mode-qty" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition bg-white text-indigo-600 shadow-sm">Exact Qty</button>
+                                <button id="sim-mode-pct" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition text-slate-500 hover:text-slate-700">% Portfolio</button>
+                            </div>
+                        </div>
 
-            <!-- Simulation Results Cards -->
-            <div id="sim-results-box" class="space-y-2.5">
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
-                        <div class="text-[10px] uppercase font-semibold text-slate-400">Gross Sale Value</div>
-                        <div class="text-base font-black text-slate-800 font-mono" id="sim-gross-usd">$0</div>
-                        <div class="text-[10px] text-slate-400 font-mono" id="sim-gross-ils">₪0</div>
+                        <div class="flex items-center gap-2">
+                            <div class="relative flex-1">
+                                <input type="number" id="sim-amount-input" value="100" placeholder="Number of shares" 
+                                       class="w-full rounded-xl border-slate-300 border p-3 pr-20 text-base font-mono font-bold focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm">
+                                <span id="sim-amount-unit" class="absolute right-3.5 top-3.5 text-xs font-bold text-slate-400 font-mono">SHARES</span>
+                            </div>
+                            <button id="sim-apply-btn" class="bg-indigo-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-indigo-700 active:bg-indigo-800 transition shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+                                <i class="ph ph-lightning text-base"></i> Calculate
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-1.5 pt-1">
+                            <span class="text-[10px] uppercase font-bold text-slate-400 mr-0.5">Quick:</span>
+                            <button onclick="window.setSimPreset('shares', 100)" class="flex-1 py-1.5 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">100 sh</button>
+                            <button onclick="window.setSimPreset('shares', 500)" class="flex-1 py-1.5 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">500 sh</button>
+                            <button onclick="window.setSimPreset('pct', 5)" class="flex-1 py-1.5 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">5%</button>
+                            <button onclick="window.setSimPreset('pct', 10)" class="flex-1 py-1.5 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">10%</button>
+                            <button onclick="window.setSimPreset('pct', 20)" class="flex-1 py-1.5 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">20%</button>
+                        </div>
                     </div>
-                    <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100 shadow-sm">
-                        <div class="text-[10px] uppercase font-bold text-emerald-700">Net Cash After Tax (25%)</div>
-                        <div class="text-base font-black text-emerald-600 font-mono" id="sim-net-ils">₪0</div>
-                        <div class="text-[10px] text-emerald-700/70 font-mono" id="sim-net-usd">$0 net</div>
+
+                    <!-- Simulation Results Cards -->
+                    <div id="sim-results-box" class="space-y-2.5">
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                                <div class="text-[10px] uppercase font-semibold text-slate-400">Gross Sale Value</div>
+                                <div class="text-base font-black text-slate-800 font-mono" id="sim-gross-usd">$0</div>
+                                <div class="text-[10px] text-slate-400 font-mono" id="sim-gross-ils">₪0</div>
+                            </div>
+                            <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-100 shadow-sm">
+                                <div class="text-[10px] uppercase font-bold text-emerald-700">Net Cash After Tax (25%)</div>
+                                <div class="text-base font-black text-emerald-600 font-mono" id="sim-net-ils">₪0</div>
+                                <div class="text-[10px] text-emerald-700/70 font-mono" id="sim-net-usd">$0 net</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-50/80 p-3.5 rounded-xl border border-indigo-100 flex items-center justify-between text-xs">
+                            <div>
+                                <span class="font-bold text-indigo-950 block">Remaining Portfolio After Sale</span>
+                                <span class="text-[11px] text-slate-500 font-mono" id="sim-new-remaining-shares">13,600 / 26,050 shares</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs font-mono font-bold text-indigo-600" id="sim-new-pct">52.2%</span>
+                                <span class="text-[10px] text-slate-400 block" id="sim-tax-cost">Tax: ₪0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex justify-end">
+                        <button id="sim-add-tx-btn" class="w-full bg-indigo-600 text-white py-3 rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm flex items-center justify-center gap-1.5">
+                            <i class="ph ph-plus-circle font-bold text-base"></i> Add Sale to Transaction Ledger
+                        </button>
                     </div>
                 </div>
 
-                <div class="bg-indigo-50/80 p-3 rounded-xl border border-indigo-100 flex items-center justify-between text-xs">
-                    <div>
-                        <span class="font-bold text-indigo-950 block">Remaining Portfolio After Sale</span>
-                        <span class="text-[11px] text-slate-500 font-mono" id="sim-new-remaining-shares">13,600 / 26,050 shares</span>
+                <!-- SUB-TAB 2: REVERSE TARGET GOAL -->
+                <div id="sim-sec-goal" class="space-y-4 hidden">
+                    <p class="text-xs text-slate-500">Calculate how many shares you need to sell to reach a target cash amount in ₪ ILS:</p>
+                    <div class="space-y-3">
+                        <div class="relative flex items-center">
+                            <span class="absolute left-3.5 text-slate-400 font-bold font-mono text-lg">₪</span>
+                            <input type="number" id="target-ils-input" placeholder="Enter target amount in ₪ ILS (e.g. 500,000)" 
+                                   class="w-full rounded-xl border-slate-300 border p-3.5 pl-9 text-base font-mono font-bold focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm">
+                        </div>
+                        <button id="calc-button" class="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold text-sm hover:bg-indigo-700 transition shadow-sm flex items-center justify-center gap-2">
+                            <i class="ph ph-calculator text-lg"></i> Calculate Required Shares
+                        </button>
                     </div>
-                    <div class="text-right">
-                        <span class="text-xs font-mono font-bold text-indigo-600" id="sim-new-pct">52.2%</span>
-                        <span class="text-[10px] text-slate-400 block" id="sim-tax-cost">Tax: ₪0</span>
+
+                    <div id="calculator-results" class="hidden space-y-3 pt-2">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-bold text-slate-700 text-xs">From Bucket B ($1.04 Basis)</span>
+                                <span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-semibold">Low Basis</span>
+                            </div>
+                            <div class="text-xl font-mono font-black text-indigo-600" id="req-bucket-b">0 shares</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5" id="pct-bucket-b">0% of total portfolio</div>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-bold text-slate-700 text-xs">From Bucket A ($23.00 Basis)</span>
+                                <span class="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded font-semibold">High Basis</span>
+                            </div>
+                            <div class="text-xl font-mono font-black text-slate-700" id="req-bucket-a">0 shares</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5" id="pct-bucket-a">0% of total portfolio</div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
+        </div>
 
-            <!-- Reflect on App Toggle & Add to Ledger Button -->
-            <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between gap-3">
-                <label class="flex items-center gap-2 cursor-pointer select-none">
-                    <input type="checkbox" id="sim-reflect-toggle" class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 accent-indigo-600">
-                    <span class="text-xs font-bold text-slate-700">Reflect in Entire App</span>
-                </label>
-                <button id="sim-add-tx-btn" class="bg-indigo-50 text-indigo-600 border border-indigo-200 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-indigo-100 transition flex items-center gap-1">
-                    <i class="ph ph-plus-circle font-bold text-sm"></i> Add Sale to Ledger
-                </button>
-            </div>
-        </section>
-
-        <!-- The "Yaara CFO" Reverse Calculator -->
-        <section class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200">
-            <div class="flex items-center gap-2 mb-4">
-                <i class="ph ph-calculator text-2xl text-indigo-500"></i>
-                <h2 class="text-lg font-bold">Reverse Calculator</h2>
-            </div>
-            <p class="text-sm text-slate-500 mb-4">How many shares do we need to sell to hit a specific ₪ target?</p>
-            
-            <div class="space-y-3 mb-4">
-                <div class="relative flex items-center">
-                    <span class="absolute left-3.5 text-slate-400 font-bold font-mono text-lg">₪</span>
-                    <input type="number" id="target-ils-input" placeholder="Enter target amount in ₪ ILS" class="w-full rounded-xl border-slate-300 border p-3.5 pl-9 text-lg font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none shadow-sm">
-                </div>
-                <button id="calc-button" class="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold text-base active:bg-indigo-700 hover:bg-indigo-700 transition shadow-sm flex items-center justify-center gap-2">
-                    <i class="ph ph-calculator text-xl"></i> Calculate Required Shares
-                </button>
-            </div>
-
-            <!-- Results -->
-            <div id="calculator-results" class="hidden space-y-3">
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="font-bold text-slate-700">From Bucket A ($23.00)</span>
-                        <span class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded">High Basis</span>
+        <!-- PAGE 3: TRANSACTION LEDGER -->
+        <div id="tab-ledger" class="space-y-6 hidden">
+            <section class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <i class="ph ph-receipt text-2xl text-indigo-600"></i>
+                        <div>
+                            <h2 class="text-base font-extrabold text-slate-800">Transaction Ledger</h2>
+                            <p class="text-[11px] text-slate-500">Record of executed & planned sales</p>
+                        </div>
                     </div>
-                    <div class="text-lg font-mono font-bold text-indigo-600" id="req-bucket-a">0 shares</div>
-                    <div class="text-xs text-slate-500 mt-1" id="pct-bucket-a">0% of total portfolio</div>
+                    <button id="add-tx-btn" class="bg-indigo-600 text-white px-3 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm flex items-center gap-1">
+                        <i class="ph ph-plus font-bold"></i> Add Sale
+                    </button>
                 </div>
 
-                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="font-bold text-indigo-900">From Bucket B ($1.04)</span>
-                        <span class="text-xs bg-indigo-200 text-indigo-800 px-2 py-1 rounded">Low Basis</span>
-                    </div>
-                    <div class="text-lg font-mono font-bold text-indigo-600" id="req-bucket-b">0 shares</div>
-                    <div class="text-xs text-slate-500 mt-1" id="pct-bucket-b">0% of total portfolio</div>
+                <div class="space-y-3" id="ledger-list">
+                    <p class="text-xs text-slate-400 text-center py-4">Loading transaction history...</p>
                 </div>
-            </div>
-        </section>
-
-        <!-- Transaction Ledger -->
-        <section class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2">
-                    <i class="ph ph-list-bullets text-2xl text-indigo-500"></i>
-                    <h2 class="text-lg font-bold">Transaction Ledger</h2>
-                </div>
-                <button id="add-tx-btn" class="bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-indigo-200 flex items-center gap-1 hover:bg-indigo-100">
-                    <i class="ph ph-plus font-bold"></i> Add Sale
-                </button>
-            </div>
-
-            <div class="space-y-3" id="ledger-list">
-                <p class="text-xs text-slate-400 text-center py-4">Loading transaction history...</p>
-            </div>
-        </section>
-
+            </section>
+        </div>
     </main>
+
+    <!-- Fixed Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-lg px-4 py-2 flex justify-around items-center">
+        <button id="nav-dashboard" onclick="window.switchMainTab('dashboard')" class="flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition text-indigo-600 bg-indigo-50 font-bold shadow-sm">
+            <i class="ph ph-house text-xl"></i>
+            <span class="text-[10px]">Dashboard</span>
+        </button>
+        <button id="nav-simulator" onclick="window.switchMainTab('simulator')" class="flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition text-slate-400 hover:text-slate-600 font-semibold">
+            <i class="ph ph-lightning text-xl"></i>
+            <span class="text-[10px]">Simulator</span>
+        </button>
+        <button id="nav-ledger" onclick="window.switchMainTab('ledger')" class="flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition text-slate-400 hover:text-slate-600 font-semibold">
+            <i class="ph ph-receipt text-xl"></i>
+            <span class="text-[10px]">Ledger</span>
+        </button>
+    </nav>
 
     <!-- FIREBASE MODULE SCRIPT -->
     <script type="module">
@@ -319,6 +358,41 @@
         let baseRateILS = 3.05;
         let rateSliderPct = 0;
         let currentRateILS = 3.05;
+
+        // Navigation tab switching
+        window.switchMainTab = function(tabName) {
+            const tabs = ['dashboard', 'simulator', 'ledger'];
+            tabs.forEach(t => {
+                const page = document.getElementById(`tab-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (t === tabName) {
+                    if (page) page.classList.remove('hidden');
+                    if (navBtn) navBtn.className = "flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition text-indigo-600 bg-indigo-50 font-bold shadow-sm";
+                } else {
+                    if (page) page.classList.add('hidden');
+                    if (navBtn) navBtn.className = "flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition text-slate-400 hover:text-slate-600 font-semibold";
+                }
+            });
+        };
+
+        window.switchSimSubTab = function(subTab) {
+            const secSell = document.getElementById('sim-sec-sell');
+            const secGoal = document.getElementById('sim-sec-goal');
+            const tabSell = document.getElementById('sim-tab-sell');
+            const tabGoal = document.getElementById('sim-tab-goal');
+
+            if (subTab === 'goal') {
+                if (secSell) secSell.classList.add('hidden');
+                if (secGoal) secGoal.classList.remove('hidden');
+                if (tabSell) tabSell.className = "py-2 rounded-lg text-slate-500 hover:text-slate-700 transition flex items-center justify-center gap-1.5";
+                if (tabGoal) tabGoal.className = "py-2 rounded-lg bg-white text-indigo-600 shadow-sm transition flex items-center justify-center gap-1.5";
+            } else {
+                if (secSell) secSell.classList.remove('hidden');
+                if (secGoal) secGoal.classList.add('hidden');
+                if (tabSell) tabSell.className = "py-2 rounded-lg bg-white text-indigo-600 shadow-sm transition flex items-center justify-center gap-1.5";
+                if (tabGoal) tabGoal.className = "py-2 rounded-lg text-slate-500 hover:text-slate-700 transition flex items-center justify-center gap-1.5";
+            }
+        };
 
         function recalcEffectivePrice() {
             currentPriceUSD = basePriceUSD * (1 + stockSliderPct / 100);
@@ -388,13 +462,14 @@
         }
         fetchLiveStockPrice();
 
-        // Event listeners for Stock Price & Exchange Rate controls
+        // Controls Event Listeners
         document.getElementById('stock-price-input').addEventListener('input', (e) => {
             const val = parseFloat(e.target.value);
             if (val && val > 0) {
                 basePriceUSD = val / (1 + stockSliderPct / 100);
                 recalcEffectivePrice();
                 updateDashboard();
+                recalcSellSimulation();
             }
         });
 
@@ -402,6 +477,7 @@
             stockSliderPct = parseFloat(e.target.value) || 0;
             recalcEffectivePrice();
             updateDashboard();
+            recalcSellSimulation();
         });
 
         document.getElementById('exchange-rate-input').addEventListener('input', (e) => {
@@ -410,6 +486,7 @@
                 baseRateILS = val / (1 + rateSliderPct / 100);
                 recalcEffectiveRate();
                 updateDashboard();
+                recalcSellSimulation();
             }
         });
 
@@ -417,6 +494,7 @@
             rateSliderPct = parseFloat(e.target.value) || 0;
             recalcEffectiveRate();
             updateDashboard();
+            recalcSellSimulation();
         });
 
         const defaultPortfolio = {
@@ -427,7 +505,6 @@
         const portfolioRef = ref(db, 'portfolio');
         const txRef = ref(db, 'transactions');
 
-        // Always sync correct initial portfolio quantities to Firebase
         set(portfolioRef, defaultPortfolio);
 
         onValue(portfolioRef, (snapshot) => {
@@ -439,6 +516,7 @@
             }
             totalShares = (portfolio.bucketA ? portfolio.bucketA.qty : 0) + (portfolio.bucketB ? portfolio.bucketB.qty : 0);
             updateDashboard();
+            recalcSellSimulation();
         });
 
         const defaultTransactions = {
@@ -456,9 +534,6 @@
             "tx_12": { id: "tx_12", date: "2026-06-29", qty: 500, price_usd: 95.00, rate_ils: 2.98, status: "completed" }
         };
 
-        // Sync actual full activity transactions with historical rates to Firebase
-        set(txRef, defaultTransactions);
-
         let currentTransactionsData = {};
 
         onValue(txRef, (snapshot) => {
@@ -471,10 +546,12 @@
                 renderTransactions(defaultTransactions);
             }
             updateDashboard();
+            recalcSellSimulation();
         }, (error) => {
             console.error("Firebase transaction read error:", error);
             renderTransactions(defaultTransactions);
             updateDashboard();
+            recalcSellSimulation();
         });
 
         function calculateNetValue(price, basis, qty, rate) {
@@ -506,11 +583,6 @@
                 }
             });
 
-            if (simReflectInApp && simSharesCount > 0) {
-                completedShares += simSharesCount;
-                completedCashILS += simNetCashILS;
-            }
-
             const INITIAL_TOTAL_SHARES = 26050;
             const INITIAL_BUCKET_B_SHARES = 25450; // Low basis ($1.04)
             const INITIAL_BUCKET_A_SHARES = 600;   // High basis ($23.00)
@@ -518,7 +590,6 @@
             const remainingShares = Math.max(0, INITIAL_TOTAL_SHARES - completedShares);
             totalShares = remainingShares;
 
-            // All completed sales were executed from Bucket B ($1.04 basis, initial 25,450)
             let remainingB = Math.max(0, INITIAL_BUCKET_B_SHARES - completedShares);
             let remainingA = completedShares > INITIAL_BUCKET_B_SHARES 
                 ? Math.max(0, INITIAL_BUCKET_A_SHARES - (completedShares - INITIAL_BUCKET_B_SHARES)) 
@@ -530,7 +601,6 @@
 
             document.getElementById('net-worth-ils').innerText = '₪' + Math.round(totalNetILS).toLocaleString();
 
-            // 80% / 20% Breakdown Calculations based on Remaining Active Shares
             const net80 = totalNetILS * 0.80;
             const net20 = totalNetILS * 0.20;
             const shares80 = Math.round(remainingShares * 0.80);
@@ -548,7 +618,6 @@
             const el20s = document.getElementById('unvested-20-shares');
             if (el20s) el20s.innerText = `${shares20.toLocaleString()} shares`;
 
-            // Remaining Shares Progress Bar Calculation
             const remainingSharesPct = Math.min(100, Math.max(0, (remainingShares / INITIAL_TOTAL_SHARES) * 100));
 
             const progressEl = document.getElementById('shares-progress');
@@ -567,8 +636,6 @@
         // Quick Sell Simulator State & Calculations
         let simMode = 'shares'; // 'shares' or 'pct'
         let simSharesCount = 100;
-        let simNetCashILS = 0;
-        let simReflectInApp = false;
 
         window.setSimPreset = function(mode, val) {
             simMode = mode;
@@ -618,9 +685,7 @@
                 simSharesCount = Math.round(rawVal);
             }
 
-            if (simSharesCount <= 0) {
-                simSharesCount = 0;
-            }
+            if (simSharesCount <= 0) simSharesCount = 0;
 
             const simFromB = Math.min(simSharesCount, activeRemainingB);
             const simFromA = Math.max(0, simSharesCount - simFromB);
@@ -629,7 +694,7 @@
             const netValueUSD_A = calculateNetValue(currentPriceUSD, portfolio.bucketA.basis, simFromA, 1);
             
             const totalNetUSD = netValueUSD_B + netValueUSD_A;
-            simNetCashILS = totalNetUSD * currentRateILS;
+            const simNetCashILS = totalNetUSD * currentRateILS;
 
             const grossUSD = simSharesCount * currentPriceUSD;
             const grossILS = grossUSD * currentRateILS;
@@ -658,10 +723,6 @@
 
             const taxCostEl = document.getElementById('sim-tax-cost');
             if (taxCostEl) taxCostEl.innerText = `Tax: ₪${Math.round(taxILS).toLocaleString()}`;
-
-            if (simReflectInApp) {
-                updateDashboard();
-            }
         }
 
         document.getElementById('sim-mode-qty').addEventListener('click', () => {
@@ -680,12 +741,6 @@
             recalcSellSimulation();
         });
 
-        document.getElementById('sim-reflect-toggle').addEventListener('change', (e) => {
-            simReflectInApp = e.target.checked;
-            recalcSellSimulation();
-            updateDashboard();
-        });
-
         document.getElementById('sim-add-tx-btn').addEventListener('click', () => {
             if (simSharesCount <= 0) return;
             const newKey = 'tx_' + Date.now();
@@ -701,16 +756,9 @@
             const updates = {};
             updates[`transactions/${newKey}`] = newTx;
             update(ref(db), updates);
-        });
 
-        document.getElementById('stock-price-input').addEventListener('input', (e) => {
-            const val = parseFloat(e.target.value);
-            if (val && val > 0) {
-                currentPriceUSD = val;
-                const headerPriceEl = document.getElementById('header-stock-price-display');
-                if (headerPriceEl) headerPriceEl.innerText = val.toFixed(2);
-                updateDashboard();
-            }
+            // Switch to ledger tab to see the new planned transaction
+            window.switchMainTab('ledger');
         });
 
         function renderTransactions(txMap) {
@@ -736,7 +784,7 @@
                     const date = tx.date || '';
                     const qty = Number(tx.qty) || 0;
                     const price = Number(tx.price_usd) || 0;
-                    const rate = Number(tx.rate_ils) || currentRateILS || 3.07;
+                    const rate = Number(tx.rate_ils) || currentRateILS || 3.05;
                     const status = tx.status || 'planned';
 
                     const statusBg = status === 'completed' ? 'bg-emerald-50/80 border-emerald-200' : 
@@ -749,7 +797,7 @@
                         <div class="p-3.5 rounded-xl border ${statusBg} flex flex-col gap-3 transition-all shadow-sm">
                             <div class="flex justify-between items-center gap-2">
                                 <input type="text" value="${date}" onchange="window.updateTxField('${key}', 'date', this.value)" 
-                                       placeholder="Date (e.g. Sep 2022)"
+                                       placeholder="Date (e.g. 2026-06-29)"
                                        class="font-bold text-sm text-slate-800 bg-transparent border-b border-dashed border-slate-300 focus:outline-none focus:border-indigo-500 w-32 px-0.5">
                                 
                                 <div class="flex items-center gap-1.5">
@@ -826,7 +874,6 @@
                 id: newKey,
                 date: new Date().toISOString().split('T')[0],
                 status: 'planned',
-                bucket: 'low',
                 qty: 500,
                 price_usd: currentPriceUSD,
                 rate_ils: currentRateILS
@@ -860,23 +907,29 @@
         });
     </script>
 
-    <!-- Register Service Worker for PWA -->
+    <!-- Register Service Worker for PWA with Auto-Refresh -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then((reg) => {
-                    reg.onupdatefound = () => {
-                        const worker = reg.installing;
-                        if (worker) {
-                            worker.onstatechange = () => {
-                                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    window.location.reload();
-                                }
-                            };
-                        }
-                    };
+                navigator.serviceWorker.register('./sw.js').then((reg) => {
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                window.location.reload();
+                            }
+                        });
+                    });
                     reg.update();
                 }).catch((err) => console.warn('SW registration failed', err));
+            });
+
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    refreshing = true;
+                    window.location.reload();
+                }
             });
         }
     </script>
