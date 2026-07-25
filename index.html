@@ -140,18 +140,91 @@
             </div>
         </section>
 
-        <!-- Liquidity Breakdown Card (80% / 20%) -->
-        <section class="grid grid-cols-2 gap-3">
-            <div class="glass-card rounded-2xl p-4 shadow-sm border border-emerald-100 bg-emerald-50/50 text-center">
-                <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">לפריעה (80%)</div>
-                <div class="text-xl font-black text-emerald-600 font-mono" id="vested-80-ils">₪0</div>
-                <div class="text-[11px] text-slate-500 mt-1 font-mono" id="vested-80-shares">10,960 shares</div>
+        <!-- Quick Sell Simulation Module -->
+        <section class="glass-card rounded-2xl p-6 shadow-sm border border-indigo-100 bg-gradient-to-b from-white to-indigo-50/30 space-y-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+                        <i class="ph ph-trend-up text-lg font-bold"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-extrabold text-slate-800">Quick Sell Simulator</h2>
+                        <p class="text-[11px] text-slate-500">Simulate selling shares or % of portfolio live</p>
+                    </div>
+                </div>
+                <span class="text-[10px] font-bold text-indigo-700 bg-indigo-100/80 px-2 py-1 rounded-full border border-indigo-200">Interactive</span>
             </div>
 
-            <div class="glass-card rounded-2xl p-4 shadow-sm border border-amber-100 bg-amber-50/50 text-center">
-                <div class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-1">לא לפריעה (20%)</div>
-                <div class="text-xl font-black text-amber-600 font-mono" id="unvested-20-ils">₪0</div>
-                <div class="text-[11px] text-slate-500 mt-1 font-mono" id="unvested-20-shares">2,740 shares</div>
+            <!-- Preset Buttons & Quick Mode -->
+            <div class="space-y-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+                <!-- Mode Selection Pills -->
+                <div class="flex justify-between items-center text-xs">
+                    <span class="font-bold text-slate-700">Select Sale Amount</span>
+                    <div class="flex gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                        <button id="sim-mode-qty" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition bg-white text-indigo-600 shadow-sm">Exact Qty</button>
+                        <button id="sim-mode-pct" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition text-slate-500 hover:text-slate-700">% Portfolio</button>
+                    </div>
+                </div>
+
+                <!-- Input Row -->
+                <div class="flex items-center gap-2">
+                    <div class="relative flex-1">
+                        <input type="number" id="sim-amount-input" value="100" placeholder="Number of shares" 
+                               class="w-full rounded-xl border-slate-300 border p-3 pr-20 text-base font-mono font-bold focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm">
+                        <span id="sim-amount-unit" class="absolute right-3.5 top-3.5 text-xs font-bold text-slate-400 font-mono">SHARES</span>
+                    </div>
+                    <button id="sim-apply-btn" class="bg-indigo-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-indigo-700 active:bg-indigo-800 transition shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+                        <i class="ph ph-lightning text-base"></i> Simulate
+                    </button>
+                </div>
+
+                <!-- Quick Percentage Buttons -->
+                <div class="flex items-center gap-1.5 pt-1">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 mr-0.5">Quick:</span>
+                    <button onclick="window.setSimPreset('shares', 100)" class="flex-1 py-1 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">100 sh</button>
+                    <button onclick="window.setSimPreset('shares', 500)" class="flex-1 py-1 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">500 sh</button>
+                    <button onclick="window.setSimPreset('pct', 5)" class="flex-1 py-1 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">5%</button>
+                    <button onclick="window.setSimPreset('pct', 10)" class="flex-1 py-1 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">10%</button>
+                    <button onclick="window.setSimPreset('pct', 20)" class="flex-1 py-1 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">20%</button>
+                </div>
+            </div>
+
+            <!-- Simulation Results Cards -->
+            <div id="sim-results-box" class="space-y-2.5">
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-[10px] uppercase font-semibold text-slate-400">Gross Sale Value</div>
+                        <div class="text-base font-black text-slate-800 font-mono" id="sim-gross-usd">$0</div>
+                        <div class="text-[10px] text-slate-400 font-mono" id="sim-gross-ils">₪0</div>
+                    </div>
+                    <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100 shadow-sm">
+                        <div class="text-[10px] uppercase font-bold text-emerald-700">Net Cash After Tax (25%)</div>
+                        <div class="text-base font-black text-emerald-600 font-mono" id="sim-net-ils">₪0</div>
+                        <div class="text-[10px] text-emerald-700/70 font-mono" id="sim-net-usd">$0 net</div>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-50/80 p-3 rounded-xl border border-indigo-100 flex items-center justify-between text-xs">
+                    <div>
+                        <span class="font-bold text-indigo-950 block">Remaining Portfolio After Sale</span>
+                        <span class="text-[11px] text-slate-500 font-mono" id="sim-new-remaining-shares">13,600 / 26,050 shares</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs font-mono font-bold text-indigo-600" id="sim-new-pct">52.2%</span>
+                        <span class="text-[10px] text-slate-400 block" id="sim-tax-cost">Tax: ₪0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reflect on App Toggle & Add to Ledger Button -->
+            <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between gap-3">
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                    <input type="checkbox" id="sim-reflect-toggle" class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 accent-indigo-600">
+                    <span class="text-xs font-bold text-slate-700">Reflect in Entire App</span>
+                </label>
+                <button id="sim-add-tx-btn" class="bg-indigo-50 text-indigo-600 border border-indigo-200 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-indigo-100 transition flex items-center gap-1">
+                    <i class="ph ph-plus-circle font-bold text-sm"></i> Add Sale to Ledger
+                </button>
             </div>
         </section>
 
@@ -433,6 +506,11 @@
                 }
             });
 
+            if (simReflectInApp && simSharesCount > 0) {
+                completedShares += simSharesCount;
+                completedCashILS += simNetCashILS;
+            }
+
             const INITIAL_TOTAL_SHARES = 26050;
             const INITIAL_BUCKET_B_SHARES = 25450; // Low basis ($1.04)
             const INITIAL_BUCKET_A_SHARES = 600;   // High basis ($23.00)
@@ -485,6 +563,145 @@
             const soldEl = document.getElementById('sold-shares-count-display');
             if (soldEl) soldEl.innerText = `${completedShares.toLocaleString()} shares sold`;
         }
+
+        // Quick Sell Simulator State & Calculations
+        let simMode = 'shares'; // 'shares' or 'pct'
+        let simSharesCount = 100;
+        let simNetCashILS = 0;
+        let simReflectInApp = false;
+
+        window.setSimPreset = function(mode, val) {
+            simMode = mode;
+            const inputEl = document.getElementById('sim-amount-input');
+            const unitEl = document.getElementById('sim-amount-unit');
+            const qtyBtn = document.getElementById('sim-mode-qty');
+            const pctBtn = document.getElementById('sim-mode-pct');
+
+            if (inputEl) inputEl.value = val;
+
+            if (mode === 'pct') {
+                if (unitEl) unitEl.innerText = '% PORTFOLIO';
+                if (qtyBtn) qtyBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-bold transition text-slate-500 hover:text-slate-700";
+                if (pctBtn) pctBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-bold transition bg-white text-indigo-600 shadow-sm";
+            } else {
+                if (unitEl) unitEl.innerText = 'SHARES';
+                if (qtyBtn) qtyBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-bold transition bg-white text-indigo-600 shadow-sm";
+                if (pctBtn) pctBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-bold transition text-slate-500 hover:text-slate-700";
+            }
+            recalcSellSimulation();
+        };
+
+        function recalcSellSimulation() {
+            const inputEl = document.getElementById('sim-amount-input');
+            const rawVal = parseFloat(inputEl ? inputEl.value : 0) || 0;
+
+            const INITIAL_TOTAL_SHARES = 26050;
+            const INITIAL_BUCKET_B_SHARES = 25450;
+
+            let completedShares = 0;
+            const txEntries = Array.isArray(currentTransactionsData) 
+                ? currentTransactionsData 
+                : Object.values(currentTransactionsData || {});
+
+            txEntries.forEach(tx => {
+                if (tx && tx.status === 'completed') {
+                    completedShares += (Number(tx.qty) || 0);
+                }
+            });
+
+            const activeRemainingShares = Math.max(0, INITIAL_TOTAL_SHARES - completedShares);
+            const activeRemainingB = Math.max(0, INITIAL_BUCKET_B_SHARES - completedShares);
+
+            if (simMode === 'pct') {
+                simSharesCount = Math.round(activeRemainingShares * (rawVal / 100));
+            } else {
+                simSharesCount = Math.round(rawVal);
+            }
+
+            if (simSharesCount <= 0) {
+                simSharesCount = 0;
+            }
+
+            const simFromB = Math.min(simSharesCount, activeRemainingB);
+            const simFromA = Math.max(0, simSharesCount - simFromB);
+
+            const netValueUSD_B = calculateNetValue(currentPriceUSD, portfolio.bucketB.basis, simFromB, 1);
+            const netValueUSD_A = calculateNetValue(currentPriceUSD, portfolio.bucketA.basis, simFromA, 1);
+            
+            const totalNetUSD = netValueUSD_B + netValueUSD_A;
+            simNetCashILS = totalNetUSD * currentRateILS;
+
+            const grossUSD = simSharesCount * currentPriceUSD;
+            const grossILS = grossUSD * currentRateILS;
+            const taxILS = Math.max(0, grossILS - simNetCashILS);
+
+            const newRemainingShares = Math.max(0, activeRemainingShares - simSharesCount);
+            const newPct = ((newRemainingShares / INITIAL_TOTAL_SHARES) * 100).toFixed(1);
+
+            const grossUsdEl = document.getElementById('sim-gross-usd');
+            if (grossUsdEl) grossUsdEl.innerText = `$${Math.round(grossUSD).toLocaleString()}`;
+
+            const grossIlsEl = document.getElementById('sim-gross-ils');
+            if (grossIlsEl) grossIlsEl.innerText = `₪${Math.round(grossILS).toLocaleString()}`;
+
+            const netIlsEl = document.getElementById('sim-net-ils');
+            if (netIlsEl) netIlsEl.innerText = `₪${Math.round(simNetCashILS).toLocaleString()}`;
+
+            const netUsdEl = document.getElementById('sim-net-usd');
+            if (netUsdEl) netUsdEl.innerText = `$${Math.round(totalNetUSD).toLocaleString()} net`;
+
+            const remSharesEl = document.getElementById('sim-new-remaining-shares');
+            if (remSharesEl) remSharesEl.innerText = `${newRemainingShares.toLocaleString()} / ${INITIAL_TOTAL_SHARES.toLocaleString()} shares`;
+
+            const newPctEl = document.getElementById('sim-new-pct');
+            if (newPctEl) newPctEl.innerText = `${newPct}%`;
+
+            const taxCostEl = document.getElementById('sim-tax-cost');
+            if (taxCostEl) taxCostEl.innerText = `Tax: ₪${Math.round(taxILS).toLocaleString()}`;
+
+            if (simReflectInApp) {
+                updateDashboard();
+            }
+        }
+
+        document.getElementById('sim-mode-qty').addEventListener('click', () => {
+            window.setSimPreset('shares', 100);
+        });
+
+        document.getElementById('sim-mode-pct').addEventListener('click', () => {
+            window.setSimPreset('pct', 5);
+        });
+
+        document.getElementById('sim-amount-input').addEventListener('input', () => {
+            recalcSellSimulation();
+        });
+
+        document.getElementById('sim-apply-btn').addEventListener('click', () => {
+            recalcSellSimulation();
+        });
+
+        document.getElementById('sim-reflect-toggle').addEventListener('change', (e) => {
+            simReflectInApp = e.target.checked;
+            recalcSellSimulation();
+            updateDashboard();
+        });
+
+        document.getElementById('sim-add-tx-btn').addEventListener('click', () => {
+            if (simSharesCount <= 0) return;
+            const newKey = 'tx_' + Date.now();
+            const newTx = {
+                id: newKey,
+                date: new Date().toISOString().split('T')[0],
+                qty: simSharesCount,
+                price_usd: currentPriceUSD,
+                rate_ils: currentRateILS,
+                status: 'planned'
+            };
+
+            const updates = {};
+            updates[`transactions/${newKey}`] = newTx;
+            update(ref(db), updates);
+        });
 
         document.getElementById('stock-price-input').addEventListener('input', (e) => {
             const val = parseFloat(e.target.value);
