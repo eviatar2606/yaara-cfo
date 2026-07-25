@@ -236,6 +236,9 @@
                 set(txRef, defaultTransactions);
                 renderTransactions(defaultTransactions);
             }
+        }, (error) => {
+            console.error("Firebase transaction read error:", error);
+            renderTransactions(defaultTransactions);
         });
 
         function calculateNetValue(price, basis, qty, rate) {
@@ -292,41 +295,62 @@
 
         function renderTransactions(txMap) {
             const container = document.getElementById('ledger-list');
-            const txList = Array.isArray(txMap) ? txMap : Object.values(txMap);
+            if (!container) return;
 
-            if (!txList || txList.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No transactions recorded.</p>`;
-                return;
+            try {
+                let entries = [];
+                if (Array.isArray(txMap)) {
+                    entries = txMap.map((tx, idx) => ({ key: tx?.id || String(idx), tx }));
+                } else if (txMap && typeof txMap === 'object') {
+                    entries = Object.entries(txMap).map(([key, tx]) => ({ key: tx?.id || key, tx }));
+                }
+
+                const validEntries = entries.filter(e => e.tx && typeof e.tx === 'object');
+
+                if (validEntries.length === 0) {
+                    container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No transactions recorded.</p>`;
+                    return;
+                }
+
+                container.innerHTML = validEntries.map(({ key, tx }) => {
+                    const date = tx.date || 'N/A';
+                    const qty = Number(tx.qty) || 0;
+                    const price = Number(tx.price_usd) || 0;
+                    const rate = Number(tx.rate_ils) || currentRateILS || 3.07;
+                    const status = tx.status || 'planned';
+
+                    const statusBg = status === 'completed' ? 'bg-emerald-50 border-emerald-200' : 
+                                     status === 'locked' ? 'bg-amber-50 border-amber-200' : 
+                                     'bg-slate-50 border-slate-200 italic';
+
+                    const totalILS = Math.round(qty * price * rate);
+
+                    return `
+                        <div class="p-3.5 rounded-xl border ${statusBg} flex flex-col gap-2 transition-all">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-sm text-slate-800">${date}</span>
+                                    <select onchange="window.updateTxStatus('${key}', this.value)" class="text-[10px] font-bold uppercase rounded-full px-2 py-0.5 border bg-white border-slate-300">
+                                        <option value="planned" ${status === 'planned' ? 'selected' : ''}>⏳ Planned</option>
+                                        <option value="locked" ${status === 'locked' ? 'selected' : ''}>🔒 Locked</option>
+                                        <option value="completed" ${status === 'completed' ? 'selected' : ''}>🟢 Completed</option>
+                                    </select>
+                                </div>
+                                <div class="font-mono font-bold text-slate-700 text-sm">
+                                    ₪${totalILS.toLocaleString()}
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center text-xs text-slate-500">
+                                <div><span class="font-mono font-semibold">${qty.toLocaleString()}</span> shares @ $${price.toFixed(2)}</div>
+                                <div class="text-[10px] text-slate-400">Rate: ${rate}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error("Error rendering transactions:", err);
+                container.innerHTML = `<p class="text-xs text-red-500 text-center py-4">Error displaying transaction history.</p>`;
             }
-
-            container.innerHTML = txList.map((tx, index) => {
-                const key = tx.id || index;
-                const statusBg = tx.status === 'completed' ? 'bg-emerald-50 border-emerald-200' : 
-                                 tx.status === 'locked' ? 'bg-amber-50 border-amber-200' : 
-                                 'bg-slate-50 border-slate-200 italic';
-
-                return `
-                    <div class="p-3.5 rounded-xl border ${statusBg} flex flex-col gap-2 transition-all">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center gap-2">
-                                <span class="font-bold text-sm text-slate-800">${tx.date}</span>
-                                <select onchange="window.updateTxStatus('${key}', this.value)" class="text-[10px] font-bold uppercase rounded-full px-2 py-0.5 border bg-white border-slate-300">
-                                    <option value="planned" ${tx.status === 'planned' ? 'selected' : ''}>⏳ Planned</option>
-                                    <option value="locked" ${tx.status === 'locked' ? 'selected' : ''}>🔒 Locked</option>
-                                    <option value="completed" ${tx.status === 'completed' ? 'selected' : ''}>🟢 Completed</option>
-                                </select>
-                            </div>
-                            <div class="font-mono font-bold text-slate-700 text-sm">
-                                ₪${Math.round(tx.qty * tx.price_usd * tx.rate_ils).toLocaleString()}
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-500">
-                            <div><span class="font-mono font-semibold">${tx.qty.toLocaleString()}</span> shares @ $${tx.price_usd.toFixed(2)}</div>
-                            <div class="text-[10px] text-slate-400">Rate: ${tx.rate_ils}</div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
         }
 
         window.updateTxStatus = function(txKey, newStatus) {
