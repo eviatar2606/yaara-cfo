@@ -655,7 +655,7 @@
                     const price = Number(tx.price_usd) || 0;
                     const rate = Number(tx.rate_ils) || currentRateILS;
                     completedShares += qty;
-                    completedCashILS += (qty * price * rate);
+                    completedCashILS += Math.round(qty * price * rate);
                 }
             });
 
