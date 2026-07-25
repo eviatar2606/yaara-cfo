@@ -31,7 +31,7 @@
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800 font-sans pb-12">
-    <!-- Header / Stock Pulse -->
+    <!-- Header / Stock & Exchange Rate Pulse -->
     <header class="bg-indigo-600 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
         <div class="flex items-center gap-2.5">
             <img src="favicon.png" alt="Yaara CFO" class="w-8 h-8 rounded-lg shadow-sm border border-indigo-400/40">
@@ -40,11 +40,14 @@
                 <span class="text-[10px] text-indigo-200 uppercase font-semibold tracking-wider">Equity & Asset Manager</span>
             </div>
         </div>
-        <div class="text-right">
-            <div class="text-[10px] text-indigo-200 uppercase font-semibold tracking-wider">LIVE TICKER</div>
-            <div class="flex items-center gap-1 font-mono font-bold text-sm bg-indigo-700/60 px-2.5 py-1 rounded-lg border border-indigo-400/30">
+        <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1 font-mono font-bold text-xs bg-indigo-700/60 px-2.5 py-1 rounded-lg border border-indigo-400/30">
                 <span class="text-emerald-300 font-bold">$</span>
                 <span id="header-stock-price-display" class="text-white">80.64</span>
+            </div>
+            <div class="flex items-center gap-1 font-mono font-bold text-xs bg-indigo-700/60 px-2.5 py-1 rounded-lg border border-indigo-400/30">
+                <span class="text-amber-300 font-bold">₪</span>
+                <span id="header-rate-display" class="text-white">3.05</span>
             </div>
         </div>
     </header>
@@ -56,22 +59,66 @@
             <div>
                 <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Total Portfolio Net Worth (After Tax)</h2>
                 <div class="text-4xl font-extrabold text-indigo-600 tracking-tight" id="net-worth-ils">₪0</div>
-                <div class="text-xs text-slate-400 mt-1">Live USD/ILS Rate: <span id="exchange-rate-display" class="font-mono font-bold text-slate-600">3.07</span> ₪</div>
+                <div class="text-xs text-slate-400 mt-1">Active USD/ILS Rate: <span id="exchange-rate-display" class="font-mono font-bold text-slate-600">3.05</span> ₪</div>
             </div>
 
-            <!-- Prominent Share Price Input Box -->
-            <div class="bg-gradient-to-r from-indigo-50 to-slate-50 border border-indigo-100/80 rounded-xl p-3.5 flex items-center justify-between text-left shadow-sm">
-                <div>
-                    <div class="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-                        JFROG Share Price ($)
+            <!-- Live Market Inputs & % Sliders Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                
+                <!-- JFROG Stock Price Control Box -->
+                <div class="bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-100/90 rounded-xl p-3.5 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                                JFROG Stock ($)
+                            </div>
+                            <div class="text-[10px] text-slate-400">Base: $<span id="base-stock-price-display">80.64</span></div>
+                        </div>
+                        <div class="flex items-center gap-1 bg-white border border-indigo-300 rounded-lg px-2 py-1 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500">
+                            <span class="font-mono font-bold text-indigo-600 text-sm">$</span>
+                            <input type="number" id="stock-price-input" step="0.01" class="w-14 font-mono font-bold text-sm text-slate-800 bg-transparent text-right outline-none" value="80.64">
+                        </div>
                     </div>
-                    <div class="text-[11px] text-slate-500 mt-0.5">Edit to recalculate portfolio</div>
+
+                    <!-- Stock Price Boost Slider -->
+                    <div class="space-y-1 bg-white/80 p-2 rounded-lg border border-indigo-100/80">
+                        <div class="flex justify-between items-center text-[10px] font-semibold text-slate-600">
+                            <span>Stock % Boost</span>
+                            <span id="stock-slider-val" class="font-mono font-bold text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded border border-indigo-200">+0%</span>
+                        </div>
+                        <input type="range" id="stock-slider" min="0" max="100" value="0" step="1" 
+                               class="w-full accent-indigo-600 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
                 </div>
-                <div class="flex items-center gap-1 bg-white border-2 border-indigo-400/80 rounded-xl px-3 py-1.5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-600 transition">
-                    <span class="font-mono font-extrabold text-indigo-600 text-lg">$</span>
-                    <input type="number" id="stock-price-input" step="0.01" class="w-20 font-mono font-bold text-lg text-slate-800 bg-transparent text-right outline-none" value="80.64">
+
+                <!-- USD/ILS Exchange Rate Control Box -->
+                <div class="bg-gradient-to-br from-amber-50/70 to-slate-50 border border-amber-100/90 rounded-xl p-3.5 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-amber-500 inline-block animate-pulse"></span>
+                                USD/ILS Rate (₪)
+                            </div>
+                            <div class="text-[10px] text-slate-400">Base: <span id="base-rate-display">3.05</span> ₪</div>
+                        </div>
+                        <div class="flex items-center gap-1 bg-white border border-amber-300 rounded-lg px-2 py-1 shadow-sm focus-within:ring-2 focus-within:ring-amber-500">
+                            <span class="font-mono font-bold text-amber-600 text-sm">₪</span>
+                            <input type="number" id="exchange-rate-input" step="0.01" class="w-14 font-mono font-bold text-sm text-slate-800 bg-transparent text-right outline-none" value="3.05">
+                        </div>
+                    </div>
+
+                    <!-- Exchange Rate Boost Slider -->
+                    <div class="space-y-1 bg-white/80 p-2 rounded-lg border border-amber-100/80">
+                        <div class="flex justify-between items-center text-[10px] font-semibold text-slate-600">
+                            <span>Rate % Boost</span>
+                            <span id="rate-slider-val" class="font-mono font-bold text-amber-600 bg-amber-50 px-1 py-0.5 rounded border border-amber-200">+0%</span>
+                        </div>
+                        <input type="range" id="rate-slider" min="0" max="50" value="0" step="1" 
+                               class="w-full accent-amber-600 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
                 </div>
+
             </div>
             
             <!-- Remaining Shares Progress Bar -->
@@ -87,7 +134,7 @@
                     <div class="bg-gradient-to-r from-indigo-600 to-emerald-500 h-2.5 rounded-full transition-all duration-500 shadow-sm" id="shares-progress" style="width: 0%"></div>
                 </div>
                 <div class="flex justify-between items-center text-[11px] font-semibold text-slate-500">
-                    <span id="shares-count-display" class="font-mono text-slate-700">0 / 13,700 shares</span>
+                    <span id="shares-count-display" class="font-mono text-slate-700">0 / 26,050 shares</span>
                     <span id="sold-shares-count-display" class="text-slate-400 font-mono">0 sold</span>
                 </div>
             </div>
@@ -191,16 +238,55 @@
         };
 
         let totalShares = portfolio.bucketA.qty + portfolio.bucketB.qty;
+        
+        let basePriceUSD = 80.64;
+        let stockSliderPct = 0;
         let currentPriceUSD = 80.64;
-        let currentRateILS = 3.07;
+
+        let baseRateILS = 3.05;
+        let rateSliderPct = 0;
+        let currentRateILS = 3.05;
+
+        function recalcEffectivePrice() {
+            currentPriceUSD = basePriceUSD * (1 + stockSliderPct / 100);
+            const inputEl = document.getElementById('stock-price-input');
+            if (inputEl) inputEl.value = currentPriceUSD.toFixed(2);
+
+            const sliderValEl = document.getElementById('stock-slider-val');
+            if (sliderValEl) sliderValEl.innerText = `+${stockSliderPct}%`;
+
+            const headerPriceEl = document.getElementById('header-stock-price-display');
+            if (headerPriceEl) headerPriceEl.innerText = currentPriceUSD.toFixed(2);
+
+            const baseDisp = document.getElementById('base-stock-price-display');
+            if (baseDisp) baseDisp.innerText = basePriceUSD.toFixed(2);
+        }
+
+        function recalcEffectiveRate() {
+            currentRateILS = baseRateILS * (1 + rateSliderPct / 100);
+            const inputEl = document.getElementById('exchange-rate-input');
+            if (inputEl) inputEl.value = currentRateILS.toFixed(2);
+
+            const sliderValEl = document.getElementById('rate-slider-val');
+            if (sliderValEl) sliderValEl.innerText = `+${rateSliderPct}%`;
+
+            const headerRateEl = document.getElementById('header-rate-display');
+            if (headerRateEl) headerRateEl.innerText = currentRateILS.toFixed(2);
+
+            const exchangeRateDisp = document.getElementById('exchange-rate-display');
+            if (exchangeRateDisp) exchangeRateDisp.innerText = currentRateILS.toFixed(2);
+
+            const baseRateDisp = document.getElementById('base-rate-display');
+            if (baseRateDisp) baseRateDisp.innerText = baseRateILS.toFixed(2);
+        }
 
         async function fetchLiveExchangeRate() {
             try {
                 const res = await fetch('https://open.er-api.com/v6/latest/USD');
                 const data = await res.json();
                 if (data && data.rates && data.rates.ILS) {
-                    currentRateILS = data.rates.ILS;
-                    document.getElementById('exchange-rate-display').innerText = currentRateILS.toFixed(2);
+                    baseRateILS = data.rates.ILS;
+                    recalcEffectiveRate();
                     updateDashboard();
                 }
             } catch (e) {
@@ -217,11 +303,8 @@
                     const rawPrice = data.data.primaryData.lastSalePrice.replace('$', '').replace(',', '');
                     const price = parseFloat(rawPrice);
                     if (price && price > 0) {
-                        currentPriceUSD = price;
-                        const inputEl = document.getElementById('stock-price-input');
-                        if (inputEl) inputEl.value = currentPriceUSD.toFixed(2);
-                        const headerPriceEl = document.getElementById('header-stock-price-display');
-                        if (headerPriceEl) headerPriceEl.innerText = currentPriceUSD.toFixed(2);
+                        basePriceUSD = price;
+                        recalcEffectivePrice();
                         updateDashboard();
                         return;
                     }
@@ -231,6 +314,37 @@
             }
         }
         fetchLiveStockPrice();
+
+        // Event listeners for Stock Price & Exchange Rate controls
+        document.getElementById('stock-price-input').addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (val && val > 0) {
+                basePriceUSD = val / (1 + stockSliderPct / 100);
+                recalcEffectivePrice();
+                updateDashboard();
+            }
+        });
+
+        document.getElementById('stock-slider').addEventListener('input', (e) => {
+            stockSliderPct = parseFloat(e.target.value) || 0;
+            recalcEffectivePrice();
+            updateDashboard();
+        });
+
+        document.getElementById('exchange-rate-input').addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (val && val > 0) {
+                baseRateILS = val / (1 + rateSliderPct / 100);
+                recalcEffectiveRate();
+                updateDashboard();
+            }
+        });
+
+        document.getElementById('rate-slider').addEventListener('input', (e) => {
+            rateSliderPct = parseFloat(e.target.value) || 0;
+            recalcEffectiveRate();
+            updateDashboard();
+        });
 
         const defaultPortfolio = {
             bucketA: { basis: 23.00, qty: 600 },
@@ -255,21 +369,21 @@
         });
 
         const defaultTransactions = {
-            "tx_1": { id: "tx_1", date: "2022-09-29", qty: 2050, price_usd: 20.92, rate_ils: 3.07, status: "completed" },
-            "tx_2": { id: "tx_2", date: "2023-09-07", qty: 580, price_usd: 28.48, rate_ils: 3.07, status: "completed" },
-            "tx_3": { id: "tx_3", date: "2024-02-11", qty: 400, price_usd: 39.20, rate_ils: 3.07, status: "completed" },
-            "tx_4": { id: "tx_4", date: "2024-04-16", qty: 1100, price_usd: 37.79, rate_ils: 3.07, status: "completed" },
-            "tx_5": { id: "tx_5", date: "2025-02-18", qty: 1000, price_usd: 41.61, rate_ils: 3.07, status: "completed" },
-            "tx_6": { id: "tx_6", date: "2025-09-04", qty: 2300, price_usd: 50.00, rate_ils: 3.07, status: "completed" },
-            "tx_7": { id: "tx_7", date: "2025-11-07", qty: 1800, price_usd: 58.00, rate_ils: 3.07, status: "completed" },
-            "tx_8": { id: "tx_8", date: "2025-12-10", qty: 800, price_usd: 70.00, rate_ils: 3.07, status: "completed" },
-            "tx_9": { id: "tx_9", date: "2026-05-19", qty: 420, price_usd: 75.00, rate_ils: 3.07, status: "completed" },
-            "tx_10": { id: "tx_10", date: "2026-05-31", qty: 400, price_usd: 82.00, rate_ils: 3.07, status: "completed" },
-            "tx_11": { id: "tx_11", date: "2026-06-21", qty: 500, price_usd: 90.00, rate_ils: 3.07, status: "completed" },
-            "tx_12": { id: "tx_12", date: "2026-06-29", qty: 500, price_usd: 95.00, rate_ils: 3.07, status: "completed" }
+            "tx_1": { id: "tx_1", date: "2022-09-29", qty: 2050, price_usd: 20.92, rate_ils: 3.55, status: "completed" },
+            "tx_2": { id: "tx_2", date: "2023-09-07", qty: 580, price_usd: 28.48, rate_ils: 3.85, status: "completed" },
+            "tx_3": { id: "tx_3", date: "2024-02-11", qty: 400, price_usd: 39.20, rate_ils: 3.68, status: "completed" },
+            "tx_4": { id: "tx_4", date: "2024-04-16", qty: 1100, price_usd: 37.79, rate_ils: 3.76, status: "completed" },
+            "tx_5": { id: "tx_5", date: "2025-02-18", qty: 1000, price_usd: 41.61, rate_ils: 3.56, status: "completed" },
+            "tx_6": { id: "tx_6", date: "2025-09-04", qty: 2300, price_usd: 50.00, rate_ils: 3.36, status: "completed" },
+            "tx_7": { id: "tx_7", date: "2025-11-07", qty: 1800, price_usd: 58.00, rate_ils: 3.26, status: "completed" },
+            "tx_8": { id: "tx_8", date: "2025-12-10", qty: 800, price_usd: 70.00, rate_ils: 3.23, status: "completed" },
+            "tx_9": { id: "tx_9", date: "2026-05-19", qty: 420, price_usd: 75.00, rate_ils: 2.92, status: "completed" },
+            "tx_10": { id: "tx_10", date: "2026-05-31", qty: 400, price_usd: 82.00, rate_ils: 2.81, status: "completed" },
+            "tx_11": { id: "tx_11", date: "2026-06-21", qty: 500, price_usd: 90.00, rate_ils: 2.96, status: "completed" },
+            "tx_12": { id: "tx_12", date: "2026-06-29", qty: 500, price_usd: 95.00, rate_ils: 2.98, status: "completed" }
         };
 
-        // Sync actual full activity transactions to Firebase
+        // Sync actual full activity transactions with historical rates to Firebase
         set(txRef, defaultTransactions);
 
         let currentTransactionsData = {};
