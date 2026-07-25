@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yaara-cfo-v14';
+const CACHE_NAME = 'yaara-cfo-v15';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();

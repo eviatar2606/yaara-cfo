@@ -33,7 +33,7 @@
 <body class="bg-slate-100 min-h-screen text-slate-800 font-sans">
 
     <!-- Header / Stock & Exchange Rate Pulse -->
-    <header class="bg-indigo-600 text-white p-3.5 sticky top-0 z-50 shadow-md flex justify-between items-center">
+    <header class="bg-indigo-600 text-white p-3.5 sticky top-0 z-40 shadow-md flex justify-between items-center">
         <div class="flex items-center gap-2">
             <img src="favicon.png" alt="Yaara CFO" class="w-7 h-7 rounded-lg shadow-sm border border-indigo-400/40">
             <div>
@@ -53,9 +53,9 @@
         </div>
     </header>
 
-    <main class="p-3 max-w-lg mx-auto space-y-4 pb-20">
+    <main class="p-3 max-w-lg mx-auto space-y-3 pb-20">
         
-        <!-- PAGE 1: DASHBOARD (Ultra-compact so 80/20 fits at a single glance!) -->
+        <!-- PAGE 1: DASHBOARD (Ultra-compact layout so everything fits at a single glance!) -->
         <div id="tab-dashboard" class="space-y-3">
             <!-- Net Worth & Shares Card -->
             <section class="glass-card rounded-2xl p-3.5 shadow-sm border border-slate-200 text-center space-y-3">
@@ -158,123 +158,123 @@
             </section>
         </div>
 
-        <!-- PAGE 2: SELL & GOAL SIMULATOR -->
-        <div id="tab-simulator" class="space-y-4 hidden">
+        <!-- PAGE 2: SELL & GOAL SIMULATOR (Ultra-compact layout!) -->
+        <div id="tab-simulator" class="space-y-3 hidden">
             <!-- Unified Sell & Goal Simulator Card -->
-            <section class="glass-card rounded-2xl p-5 shadow-sm border border-indigo-100 bg-gradient-to-b from-white to-indigo-50/30 space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+            <section class="glass-card rounded-2xl p-4 shadow-sm border border-indigo-100 bg-gradient-to-b from-white to-indigo-50/30 space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-2">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
-                            <i class="ph ph-calculator text-lg font-bold"></i>
+                        <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+                            <i class="ph ph-calculator text-base font-bold"></i>
                         </div>
                         <div>
-                            <h2 class="text-base font-extrabold text-slate-800">Sell & Goal Simulator</h2>
-                            <p class="text-[10px] text-slate-500">Calculate sale proceeds or reverse target ₪ goals</p>
+                            <h2 class="text-sm font-extrabold text-slate-800 leading-none">Sell & Goal Simulator</h2>
+                            <span class="text-[9px] text-slate-400">Calculate sale proceeds or target ₪ goals</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Sub-Tab Pill Switcher -->
-                <div class="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
-                    <button id="sim-tab-sell" onclick="window.switchSimSubTab('sell')" class="py-2 rounded-lg bg-white text-indigo-600 shadow-sm transition flex items-center justify-center gap-1.5">
-                        <i class="ph ph-lightning text-sm"></i> Sell Amount / %
+                <div class="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px] font-bold">
+                    <button id="sim-tab-sell" onclick="window.switchSimSubTab('sell')" class="py-1.5 rounded-lg bg-white text-indigo-600 shadow-sm transition flex items-center justify-center gap-1">
+                        <i class="ph ph-lightning text-xs"></i> Sell Amount / %
                     </button>
-                    <button id="sim-tab-goal" onclick="window.switchSimSubTab('goal')" class="py-2 rounded-lg text-slate-500 hover:text-slate-700 transition flex items-center justify-center gap-1.5">
-                        <i class="ph ph-target text-sm"></i> Target ₪ Goal
+                    <button id="sim-tab-goal" onclick="window.switchSimSubTab('goal')" class="py-1.5 rounded-lg text-slate-500 hover:text-slate-700 transition flex items-center justify-center gap-1">
+                        <i class="ph ph-target text-xs"></i> Target ₪ Goal
                     </button>
                 </div>
 
                 <!-- SUB-TAB 1: SELL AMOUNT / % -->
-                <div id="sim-sec-sell" class="space-y-4">
-                    <div class="space-y-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="font-bold text-slate-700">Select Sale Amount</span>
-                            <div class="flex gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-                                <button id="sim-mode-qty" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition bg-white text-indigo-600 shadow-sm">Exact Qty</button>
-                                <button id="sim-mode-pct" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition text-slate-500 hover:text-slate-700">% Portfolio</button>
+                <div id="sim-sec-sell" class="space-y-2.5">
+                    <div class="space-y-2 bg-white p-3 rounded-xl border border-slate-200/80 shadow-sm">
+                        <div class="flex justify-between items-center text-[11px]">
+                            <span class="font-extrabold text-slate-700">Sale Amount</span>
+                            <div class="flex gap-0.5 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                                <button id="sim-mode-qty" class="px-2 py-0.5 rounded text-[10px] font-bold transition bg-white text-indigo-600 shadow-sm">Exact Qty</button>
+                                <button id="sim-mode-pct" class="px-2 py-0.5 rounded text-[10px] font-bold transition text-slate-500 hover:text-slate-700">% Portfolio</button>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-2">
                             <div class="relative flex-1">
-                                <input type="number" id="sim-amount-input" value="100" placeholder="Number of shares" 
-                                       class="w-full rounded-xl border-slate-300 border p-3 pr-20 text-base font-mono font-bold focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm">
-                                <span id="sim-amount-unit" class="absolute right-3.5 top-3.5 text-xs font-bold text-slate-400 font-mono">SHARES</span>
+                                <input type="number" id="sim-amount-input" value="100" placeholder="Quantity" 
+                                       class="w-full rounded-xl border-slate-300 border p-2.5 pr-16 text-sm font-mono font-bold focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm">
+                                <span id="sim-amount-unit" class="absolute right-2.5 top-2.5 text-[10px] font-bold text-slate-400 font-mono">SHARES</span>
                             </div>
-                            <button id="sim-apply-btn" class="bg-indigo-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-indigo-700 active:bg-indigo-800 transition shadow-sm flex items-center gap-1.5 whitespace-nowrap">
-                                <i class="ph ph-lightning text-base"></i> Calculate
+                            <button id="sim-apply-btn" class="bg-indigo-600 text-white px-3.5 py-2.5 rounded-xl font-bold text-xs hover:bg-indigo-700 active:bg-indigo-800 transition shadow-sm flex items-center gap-1 whitespace-nowrap">
+                                <i class="ph ph-lightning text-sm"></i> Calculate
                             </button>
                         </div>
 
-                        <div class="flex items-center gap-1.5 pt-1">
-                            <span class="text-[10px] uppercase font-bold text-slate-400 mr-0.5">Quick:</span>
-                            <button onclick="window.setSimPreset('shares', 100)" class="flex-1 py-1.5 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">100 sh</button>
-                            <button onclick="window.setSimPreset('shares', 500)" class="flex-1 py-1.5 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">500 sh</button>
-                            <button onclick="window.setSimPreset('pct', 5)" class="flex-1 py-1.5 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">5%</button>
-                            <button onclick="window.setSimPreset('pct', 10)" class="flex-1 py-1.5 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">10%</button>
-                            <button onclick="window.setSimPreset('pct', 20)" class="flex-1 py-1.5 px-1 rounded-lg text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">20%</button>
+                        <div class="flex items-center gap-1 pt-0.5">
+                            <span class="text-[9px] uppercase font-extrabold text-slate-400 mr-0.5">Quick:</span>
+                            <button onclick="window.setSimPreset('shares', 100)" class="flex-1 py-1 px-1 rounded-lg text-[10px] font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">100 sh</button>
+                            <button onclick="window.setSimPreset('shares', 500)" class="flex-1 py-1 px-1 rounded-lg text-[10px] font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">500 sh</button>
+                            <button onclick="window.setSimPreset('pct', 5)" class="flex-1 py-1 px-1 rounded-lg text-[10px] font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">5%</button>
+                            <button onclick="window.setSimPreset('pct', 10)" class="flex-1 py-1 px-1 rounded-lg text-[10px] font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">10%</button>
+                            <button onclick="window.setSimPreset('pct', 20)" class="flex-1 py-1 px-1 rounded-lg text-[10px] font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200 transition">20%</button>
                         </div>
                     </div>
 
                     <!-- Simulation Results Cards -->
-                    <div id="sim-results-box" class="space-y-2.5">
+                    <div id="sim-results-box" class="space-y-2">
                         <div class="grid grid-cols-2 gap-2 text-xs">
-                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                                <div class="text-[10px] uppercase font-semibold text-slate-400">Gross Sale Value</div>
-                                <div class="text-base font-black text-slate-800 font-mono" id="sim-gross-usd">$0</div>
-                                <div class="text-[10px] text-slate-400 font-mono" id="sim-gross-ils">₪0</div>
+                            <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
+                                <div class="text-[9px] uppercase font-bold text-slate-400">Gross Sale Value</div>
+                                <div class="text-sm font-black text-slate-800 font-mono" id="sim-gross-usd">$0</div>
+                                <div class="text-[9px] text-slate-400 font-mono" id="sim-gross-ils">₪0</div>
                             </div>
-                            <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-100 shadow-sm">
-                                <div class="text-[10px] uppercase font-bold text-emerald-700">Net Cash After Tax (25%)</div>
-                                <div class="text-base font-black text-emerald-600 font-mono" id="sim-net-ils">₪0</div>
-                                <div class="text-[10px] text-emerald-700/70 font-mono" id="sim-net-usd">$0 net</div>
+                            <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-100 shadow-sm">
+                                <div class="text-[9px] uppercase font-extrabold text-emerald-700">Net Cash (25% Tax)</div>
+                                <div class="text-sm font-black text-emerald-600 font-mono" id="sim-net-ils">₪0</div>
+                                <div class="text-[9px] text-emerald-700/70 font-mono" id="sim-net-usd">$0 net</div>
                             </div>
                         </div>
 
-                        <div class="bg-indigo-50/80 p-3.5 rounded-xl border border-indigo-100 flex items-center justify-between text-xs">
+                        <div class="bg-indigo-50/80 p-2.5 rounded-xl border border-indigo-100 flex items-center justify-between text-xs">
                             <div>
-                                <span class="font-bold text-indigo-950 block">Remaining Portfolio After Sale</span>
-                                <span class="text-[11px] text-slate-500 font-mono" id="sim-new-remaining-shares">13,600 / 26,050 shares</span>
+                                <span class="font-extrabold text-indigo-950 block text-[11px]">Remaining Portfolio After Sale</span>
+                                <span class="text-[10px] text-slate-500 font-mono" id="sim-new-remaining-shares">13,600 / 26,050 shares</span>
                             </div>
                             <div class="text-right">
                                 <span class="text-xs font-mono font-bold text-indigo-600" id="sim-new-pct">52.2%</span>
-                                <span class="text-[10px] text-slate-400 block" id="sim-tax-cost">Tax: ₪0</span>
+                                <span class="text-[9px] text-slate-400 block" id="sim-tax-cost">Tax: ₪0</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- SUB-TAB 2: REVERSE TARGET GOAL -->
-                <div id="sim-sec-goal" class="space-y-4 hidden">
-                    <p class="text-xs text-slate-500">Calculate how many shares you need to sell to reach a target cash amount in ₪ ILS:</p>
-                    <div class="space-y-3">
+                <div id="sim-sec-goal" class="space-y-3 hidden">
+                    <p class="text-[11px] text-slate-500">Calculate required shares to reach target net cash in ₪:</p>
+                    <div class="space-y-2">
                         <div class="relative flex items-center">
-                            <span class="absolute left-3.5 text-slate-400 font-bold font-mono text-lg">₪</span>
-                            <input type="number" id="target-ils-input" placeholder="Enter target amount in ₪ ILS (e.g. 500,000)" 
-                                   class="w-full rounded-xl border-slate-300 border p-3.5 pl-9 text-base font-mono font-bold focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm">
+                            <span class="absolute left-3 text-slate-400 font-bold font-mono text-base">₪</span>
+                            <input type="number" id="target-ils-input" placeholder="Enter target amount in ₪ ILS" 
+                                   class="w-full rounded-xl border-slate-300 border p-2.5 pl-8 text-sm font-mono font-bold focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm">
                         </div>
-                        <button id="calc-button" class="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold text-sm hover:bg-indigo-700 transition shadow-sm flex items-center justify-center gap-2">
-                            <i class="ph ph-calculator text-lg"></i> Calculate Required Shares
+                        <button id="calc-button" class="w-full bg-indigo-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-indigo-700 transition shadow-sm flex items-center justify-center gap-1.5">
+                            <i class="ph ph-calculator text-base"></i> Calculate Required Shares
                         </button>
                     </div>
 
-                    <div id="calculator-results" class="hidden space-y-3 pt-2">
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="font-bold text-slate-700 text-xs">From Bucket B ($1.04 Basis)</span>
-                                <span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-semibold">Low Basis</span>
+                    <div id="calculator-results" class="hidden space-y-2 pt-1">
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="flex justify-between items-center mb-0.5">
+                                <span class="font-bold text-slate-700 text-[11px]">From Bucket B ($1.04 Basis)</span>
+                                <span class="text-[9px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded font-bold">Low Basis</span>
                             </div>
-                            <div class="text-xl font-mono font-black text-indigo-600" id="req-bucket-b">0 shares</div>
-                            <div class="text-[11px] text-slate-400 mt-0.5" id="pct-bucket-b">0% of total portfolio</div>
+                            <div class="text-lg font-mono font-black text-indigo-600" id="req-bucket-b">0 shares</div>
+                            <div class="text-[10px] text-slate-400" id="pct-bucket-b">0% of total portfolio</div>
                         </div>
 
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="font-bold text-slate-700 text-xs">From Bucket A ($23.00 Basis)</span>
-                                <span class="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded font-semibold">High Basis</span>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <div class="flex justify-between items-center mb-0.5">
+                                <span class="font-bold text-slate-700 text-[11px]">From Bucket A ($23.00 Basis)</span>
+                                <span class="text-[9px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-bold">High Basis</span>
                             </div>
-                            <div class="text-xl font-mono font-black text-slate-700" id="req-bucket-a">0 shares</div>
-                            <div class="text-[11px] text-slate-400 mt-0.5" id="pct-bucket-a">0% of total portfolio</div>
+                            <div class="text-lg font-mono font-black text-slate-700" id="req-bucket-a">0 shares</div>
+                            <div class="text-[10px] text-slate-400" id="pct-bucket-a">0% of total portfolio</div>
                         </div>
                     </div>
                 </div>
@@ -282,40 +282,66 @@
         </div>
 
         <!-- PAGE 3: TRANSACTION LEDGER -->
-        <div id="tab-ledger" class="space-y-4 hidden">
-            <section class="glass-card rounded-2xl p-5 shadow-sm border border-slate-200">
-                <div class="flex items-center justify-between mb-4">
+        <div id="tab-ledger" class="space-y-3 hidden">
+            <section class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
-                        <i class="ph ph-receipt text-2xl text-indigo-600"></i>
+                        <i class="ph ph-receipt text-xl text-indigo-600"></i>
                         <div>
-                            <h2 class="text-base font-extrabold text-slate-800">Transaction Ledger</h2>
-                            <p class="text-[10px] text-slate-500">Record of executed sales (Locked by default)</p>
+                            <h2 class="text-sm font-extrabold text-slate-800 leading-none">Transaction Ledger</h2>
+                            <span class="text-[9px] text-slate-400">Record of executed sales (Locked by default)</span>
                         </div>
                     </div>
-                    <button id="add-tx-btn" class="bg-indigo-600 text-white px-3 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm flex items-center gap-1">
+                    <button id="add-tx-btn" class="bg-indigo-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm flex items-center gap-1">
                         <i class="ph ph-plus font-bold"></i> Add Sale
                     </button>
                 </div>
 
-                <div class="space-y-3" id="ledger-list">
+                <div class="space-y-2.5" id="ledger-list">
                     <p class="text-xs text-slate-400 text-center py-4">Loading transaction history...</p>
                 </div>
             </section>
         </div>
     </main>
 
+    <!-- Custom Glassmorphism Confirmation Modal (Replaces ugly browser alerts!) -->
+    <div id="custom-modal-backdrop" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200">
+        <div class="glass-card bg-white rounded-3xl p-5 max-w-xs w-full shadow-2xl border border-indigo-100 space-y-3.5 transform scale-95 transition-transform duration-200" id="custom-modal-box">
+            <div class="flex items-center justify-between">
+                <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow-inner" id="modal-icon-bg">
+                    <i class="ph text-xl font-bold" id="modal-icon"></i>
+                </div>
+                <button onclick="window.closeCustomModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 hover:text-slate-600 flex items-center justify-center transition">
+                    <i class="ph ph-x font-bold text-sm"></i>
+                </button>
+            </div>
+            <div>
+                <h3 class="text-sm font-extrabold text-slate-900" id="modal-title">Title</h3>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed" id="modal-body">Body text.</p>
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+                <button id="modal-cancel-btn" onclick="window.closeCustomModal()" class="flex-1 py-2.5 px-3 rounded-xl text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">
+                    Cancel
+                </button>
+                <button id="modal-confirm-btn" class="flex-1 py-2.5 px-3 rounded-xl text-xs font-bold text-white transition shadow-md">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Fixed Bottom Navigation Bar -->
-    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-lg px-4 py-2 flex justify-around items-center">
-        <button id="nav-dashboard" onclick="window.switchMainTab('dashboard')" class="flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition text-indigo-600 bg-indigo-50 font-bold shadow-sm">
-            <i class="ph ph-house text-xl"></i>
+    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-lg px-4 py-2 flex justify-around items-center">
+        <button id="nav-dashboard" onclick="window.switchMainTab('dashboard')" class="flex flex-col items-center gap-0.5 px-4 py-1 rounded-xl transition text-indigo-600 bg-indigo-50 font-bold shadow-sm">
+            <i class="ph ph-house text-lg"></i>
             <span class="text-[10px]">Dashboard</span>
         </button>
-        <button id="nav-simulator" onclick="window.switchMainTab('simulator')" class="flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition text-slate-400 hover:text-slate-600 font-semibold">
-            <i class="ph ph-lightning text-xl"></i>
+        <button id="nav-simulator" onclick="window.switchMainTab('simulator')" class="flex flex-col items-center gap-0.5 px-4 py-1 rounded-xl transition text-slate-400 hover:text-slate-600 font-semibold">
+            <i class="ph ph-lightning text-lg"></i>
             <span class="text-[10px]">Simulator</span>
         </button>
-        <button id="nav-ledger" onclick="window.switchMainTab('ledger')" class="flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition text-slate-400 hover:text-slate-600 font-semibold">
-            <i class="ph ph-receipt text-xl"></i>
+        <button id="nav-ledger" onclick="window.switchMainTab('ledger')" class="flex flex-col items-center gap-0.5 px-4 py-1 rounded-xl transition text-slate-400 hover:text-slate-600 font-semibold">
+            <i class="ph ph-receipt text-lg"></i>
             <span class="text-[10px]">Ledger</span>
         </button>
     </nav>
@@ -353,7 +379,57 @@
         let rateSliderPct = 0;
         let currentRateILS = 3.05;
 
-        let unlockedTxMap = {}; // Tracks which transaction keys are unlocked for editing
+        let unlockedTxMap = {}; 
+        let modalConfirmHandler = null;
+
+        // Custom Modal UI handler
+        window.showCustomModal = function({ title, body, icon, iconBg, confirmText, confirmClass, onConfirm }) {
+            const backdrop = document.getElementById('custom-modal-backdrop');
+            const box = document.getElementById('custom-modal-box');
+            const titleEl = document.getElementById('modal-title');
+            const bodyEl = document.getElementById('modal-body');
+            const iconEl = document.getElementById('modal-icon');
+            const iconBgEl = document.getElementById('modal-icon-bg');
+            const confirmBtn = document.getElementById('modal-confirm-btn');
+
+            if (!backdrop || !box) return;
+
+            titleEl.innerText = title || 'Confirmation';
+            bodyEl.innerText = body || '';
+            iconEl.className = `ph ${icon || 'ph-warning'} text-xl font-bold`;
+            iconBgEl.className = `w-10 h-10 rounded-2xl flex items-center justify-center shadow-inner ${iconBg || 'bg-amber-100 text-amber-600'}`;
+            
+            confirmBtn.innerText = confirmText || 'Confirm';
+            confirmBtn.className = `flex-1 py-2.5 px-3 rounded-xl text-xs font-bold text-white transition shadow-md ${confirmClass || 'bg-indigo-600 hover:bg-indigo-700'}`;
+
+            modalConfirmHandler = onConfirm;
+
+            backdrop.classList.remove('hidden');
+            setTimeout(() => {
+                backdrop.classList.remove('opacity-0');
+                box.classList.remove('scale-95');
+                box.classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closeCustomModal = function() {
+            const backdrop = document.getElementById('custom-modal-backdrop');
+            const box = document.getElementById('custom-modal-box');
+            if (!backdrop || !box) return;
+
+            backdrop.classList.add('opacity-0');
+            box.classList.remove('scale-100');
+            box.classList.add('scale-95');
+            setTimeout(() => {
+                backdrop.classList.add('hidden');
+                modalConfirmHandler = null;
+            }, 200);
+        };
+
+        document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+            if (modalConfirmHandler) modalConfirmHandler();
+            window.closeCustomModal();
+        });
 
         // Navigation tab switching
         window.switchMainTab = function(tabName) {
@@ -363,10 +439,10 @@
                 const navBtn = document.getElementById(`nav-${t}`);
                 if (t === tabName) {
                     if (page) page.classList.remove('hidden');
-                    if (navBtn) navBtn.className = "flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition text-indigo-600 bg-indigo-50 font-bold shadow-sm";
+                    if (navBtn) navBtn.className = "flex flex-col items-center gap-0.5 px-4 py-1 rounded-xl transition text-indigo-600 bg-indigo-50 font-bold shadow-sm";
                 } else {
                     if (page) page.classList.add('hidden');
-                    if (navBtn) navBtn.className = "flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition text-slate-400 hover:text-slate-600 font-semibold";
+                    if (navBtn) navBtn.className = "flex flex-col items-center gap-0.5 px-4 py-1 rounded-xl transition text-slate-400 hover:text-slate-600 font-semibold";
                 }
             });
         };
@@ -380,13 +456,13 @@
             if (subTab === 'goal') {
                 if (secSell) secSell.classList.add('hidden');
                 if (secGoal) secGoal.classList.remove('hidden');
-                if (tabSell) tabSell.className = "py-2 rounded-lg text-slate-500 hover:text-slate-700 transition flex items-center justify-center gap-1.5";
-                if (tabGoal) tabGoal.className = "py-2 rounded-lg bg-white text-indigo-600 shadow-sm transition flex items-center justify-center gap-1.5";
+                if (tabSell) tabSell.className = "py-1.5 rounded-lg text-slate-500 hover:text-slate-700 transition flex items-center justify-center gap-1";
+                if (tabGoal) tabGoal.className = "py-1.5 rounded-lg bg-white text-indigo-600 shadow-sm transition flex items-center justify-center gap-1";
             } else {
                 if (secSell) secSell.classList.remove('hidden');
                 if (secGoal) secGoal.classList.add('hidden');
-                if (tabSell) tabSell.className = "py-2 rounded-lg bg-white text-indigo-600 shadow-sm transition flex items-center justify-center gap-1.5";
-                if (tabGoal) tabGoal.className = "py-2 rounded-lg text-slate-500 hover:text-slate-700 transition flex items-center justify-center gap-1.5";
+                if (tabSell) tabSell.className = "py-1.5 rounded-lg bg-white text-indigo-600 shadow-sm transition flex items-center justify-center gap-1";
+                if (tabGoal) tabGoal.className = "py-1.5 rounded-lg text-slate-500 hover:text-slate-700 transition flex items-center justify-center gap-1";
             }
         };
 
@@ -644,12 +720,12 @@
 
             if (mode === 'pct') {
                 if (unitEl) unitEl.innerText = '% PORTFOLIO';
-                if (qtyBtn) qtyBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-bold transition text-slate-500 hover:text-slate-700";
-                if (pctBtn) pctBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-bold transition bg-white text-indigo-600 shadow-sm";
+                if (qtyBtn) qtyBtn.className = "px-2 py-0.5 rounded text-[10px] font-bold transition text-slate-500 hover:text-slate-700";
+                if (pctBtn) pctBtn.className = "px-2 py-0.5 rounded text-[10px] font-bold transition bg-white text-indigo-600 shadow-sm";
             } else {
                 if (unitEl) unitEl.innerText = 'SHARES';
-                if (qtyBtn) qtyBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-bold transition bg-white text-indigo-600 shadow-sm";
-                if (pctBtn) pctBtn.className = "px-2.5 py-1 rounded-md text-[11px] font-bold transition text-slate-500 hover:text-slate-700";
+                if (qtyBtn) qtyBtn.className = "px-2 py-0.5 rounded text-[10px] font-bold transition bg-white text-indigo-600 shadow-sm";
+                if (pctBtn) pctBtn.className = "px-2 py-0.5 rounded text-[10px] font-bold transition text-slate-500 hover:text-slate-700";
             }
             recalcSellSimulation();
         };
@@ -742,10 +818,18 @@
                 delete unlockedTxMap[key];
                 renderTransactions(currentTransactionsData);
             } else {
-                if (confirm("⚠️ EDIT COMPLETED TRANSACTION WARNING\n\nThis transaction has already been executed. Modifying historical sales will alter your total portfolio calculations.\n\nDo you want to unlock this transaction to edit it?")) {
-                    unlockedTxMap[key] = true;
-                    renderTransactions(currentTransactionsData);
-                }
+                window.showCustomModal({
+                    title: 'Unlock Executed Sale',
+                    body: 'This historical transaction has already been executed. Modifying its quantity, price, or rate will recalculate your active portfolio and net worth. Unlock for editing?',
+                    icon: 'ph-lock-key-open',
+                    iconBg: 'bg-amber-100 text-amber-600',
+                    confirmText: 'Unlock Transaction',
+                    confirmClass: 'bg-amber-600 hover:bg-amber-700',
+                    onConfirm: () => {
+                        unlockedTxMap[key] = true;
+                        renderTransactions(currentTransactionsData);
+                    }
+                });
             }
         };
 
@@ -849,30 +933,45 @@
         };
 
         window.deleteTx = function(txKey) {
-            if (confirm('⚠️ WARNING: Deleting a transaction will restore its shares back into your active portfolio.\n\nAre you sure you want to delete this sale?')) {
-                const updates = {};
-                updates[`transactions/${txKey}`] = null;
-                update(ref(db), updates);
-            }
+            window.showCustomModal({
+                title: 'Delete Sale Transaction',
+                body: 'Deleting this sale transaction will restore its shares back into your remaining active portfolio and update total net worth. Are you sure?',
+                icon: 'ph-trash',
+                iconBg: 'bg-red-100 text-red-600',
+                confirmText: 'Delete Sale',
+                confirmClass: 'bg-red-600 hover:bg-red-700',
+                onConfirm: () => {
+                    const updates = {};
+                    updates[`transactions/${txKey}`] = null;
+                    update(ref(db), updates);
+                }
+            });
         };
 
         document.getElementById('add-tx-btn').addEventListener('click', () => {
-            const confirmed = confirm("⚠️ RECORD COMPLETED TRANSACTION WARNING\n\nAdding a sale records a COMPLETED transaction that will immediately deduct shares from your active portfolio and update total net worth.\n\nAre you sure you want to add a new completed transaction?");
-            if (!confirmed) return;
+            window.showCustomModal({
+                title: 'Record Completed Sale',
+                body: 'Adding a sale records an EXECUTED transaction that will immediately deduct shares from your active remaining portfolio and update total net worth.',
+                icon: 'ph-plus-circle',
+                iconBg: 'bg-indigo-100 text-indigo-600',
+                confirmText: 'Add Completed Sale',
+                confirmClass: 'bg-indigo-600 hover:bg-indigo-700',
+                onConfirm: () => {
+                    const newKey = 'tx_' + Date.now();
+                    const newTx = {
+                        id: newKey,
+                        date: new Date().toISOString().split('T')[0],
+                        status: 'completed',
+                        qty: 500,
+                        price_usd: currentPriceUSD,
+                        rate_ils: currentRateILS
+                    };
 
-            const newKey = 'tx_' + Date.now();
-            const newTx = {
-                id: newKey,
-                date: new Date().toISOString().split('T')[0],
-                status: 'completed',
-                qty: 500,
-                price_usd: currentPriceUSD,
-                rate_ils: currentRateILS
-            };
-
-            const updates = {};
-            updates[`transactions/${newKey}`] = newTx;
-            update(ref(db), updates);
+                    const updates = {};
+                    updates[`transactions/${newKey}`] = newTx;
+                    update(ref(db), updates);
+                }
+            });
         });
 
         document.getElementById('calc-button').addEventListener('click', () => {
@@ -931,7 +1030,6 @@
                 }).catch((err) => console.warn('SW registration failed', err));
             });
 
-            // Trigger update check whenever app comes to foreground or focus
             window.addEventListener('focus', updateSW);
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') updateSW();
