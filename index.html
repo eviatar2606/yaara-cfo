@@ -335,9 +335,9 @@
             try {
                 let entries = [];
                 if (Array.isArray(txMap)) {
-                    entries = txMap.map((tx, idx) => ({ key: tx?.id || String(idx), tx }));
+                    entries = txMap.map((tx, idx) => ({ key: String(idx), tx }));
                 } else if (txMap && typeof txMap === 'object') {
-                    entries = Object.entries(txMap).map(([key, tx]) => ({ key: tx?.id || key, tx }));
+                    entries = Object.entries(txMap).map(([key, tx]) => ({ key: key, tx }));
                 }
 
                 const validEntries = entries.filter(e => e.tx && typeof e.tx === 'object');
