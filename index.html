@@ -187,10 +187,9 @@
 
         let portfolio = {
             bucketA: { basis: 23.00, qty: 600 },
-            bucketB: { basis: 1.04, qty: 13100 }
+            bucketB: { basis: 1.04, qty: 25450 }
         };
 
-        const houseTargetILS = 4494865;
         let totalShares = portfolio.bucketA.qty + portfolio.bucketB.qty;
         let currentPriceUSD = 80.64;
         let currentRateILS = 3.07;
@@ -235,13 +234,13 @@
 
         const defaultPortfolio = {
             bucketA: { basis: 23.00, qty: 600 },
-            bucketB: { basis: 1.04, qty: 13100 }
+            bucketB: { basis: 1.04, qty: 25450 }
         };
 
         const portfolioRef = ref(db, 'portfolio');
         const txRef = ref(db, 'transactions');
 
-        // Always ensure portfolio is synced to 13,700 total shares in Firebase
+        // Always sync correct initial portfolio quantities to Firebase
         set(portfolioRef, defaultPortfolio);
 
         onValue(portfolioRef, (snapshot) => {
@@ -256,19 +255,22 @@
         });
 
         const defaultTransactions = {
-            "tx_1": { id: "tx_1", date: "Sep 2022", qty: 2050, price_usd: 20.92, rate_ils: 3.07, status: "completed" },
-            "tx_2": { id: "tx_2", date: "Sep 2023", qty: 580, price_usd: 28.48, rate_ils: 3.07, status: "completed" },
-            "tx_3": { id: "tx_3", date: "Feb 2024", qty: 400, price_usd: 39.20, rate_ils: 3.07, status: "completed" },
-            "tx_4": { id: "tx_4", date: "Apr 2024", qty: 1100, price_usd: 37.79, rate_ils: 3.07, status: "completed" },
-            "tx_5": { id: "tx_5", date: "Feb 2025", qty: 1000, price_usd: 41.00, rate_ils: 3.07, status: "locked" },
-            "tx_6": { id: "tx_6", date: "Sep 2025", qty: 2300, price_usd: 50.00, rate_ils: 3.07, status: "locked" },
-            "tx_7": { id: "tx_7", date: "Nov 2025", qty: 1800, price_usd: 80.64, rate_ils: 3.07, status: "planned" },
-            "tx_8": { id: "tx_8", date: "Dec 2025", qty: 800, price_usd: 70.00, rate_ils: 3.07, status: "locked" },
-            "tx_9": { id: "tx_9", date: "May 2026", qty: 420, price_usd: 75.00, rate_ils: 3.07, status: "planned" },
-            "tx_10": { id: "tx_10", date: "Jun 2026", qty: 400, price_usd: 82.00, rate_ils: 3.07, status: "planned" },
-            "tx_11": { id: "tx_11", date: "Jul 2026", qty: 500, price_usd: 80.64, rate_ils: 3.07, status: "planned" },
-            "tx_12": { id: "tx_12", date: "Jul 2026", qty: 500, price_usd: 80.64, rate_ils: 3.07, status: "planned" }
+            "tx_1": { id: "tx_1", date: "2022-09-29", qty: 2050, price_usd: 20.92, rate_ils: 3.07, status: "completed" },
+            "tx_2": { id: "tx_2", date: "2023-09-07", qty: 580, price_usd: 28.48, rate_ils: 3.07, status: "completed" },
+            "tx_3": { id: "tx_3", date: "2024-02-11", qty: 400, price_usd: 39.20, rate_ils: 3.07, status: "completed" },
+            "tx_4": { id: "tx_4", date: "2024-04-16", qty: 1100, price_usd: 37.79, rate_ils: 3.07, status: "completed" },
+            "tx_5": { id: "tx_5", date: "2025-02-18", qty: 1000, price_usd: 41.61, rate_ils: 3.07, status: "completed" },
+            "tx_6": { id: "tx_6", date: "2025-09-04", qty: 2300, price_usd: 50.00, rate_ils: 3.07, status: "completed" },
+            "tx_7": { id: "tx_7", date: "2025-11-07", qty: 1800, price_usd: 58.00, rate_ils: 3.07, status: "completed" },
+            "tx_8": { id: "tx_8", date: "2025-12-10", qty: 800, price_usd: 70.00, rate_ils: 3.07, status: "completed" },
+            "tx_9": { id: "tx_9", date: "2026-05-19", qty: 420, price_usd: 75.00, rate_ils: 3.07, status: "completed" },
+            "tx_10": { id: "tx_10", date: "2026-05-31", qty: 400, price_usd: 82.00, rate_ils: 3.07, status: "completed" },
+            "tx_11": { id: "tx_11", date: "2026-06-21", qty: 500, price_usd: 90.00, rate_ils: 3.07, status: "completed" },
+            "tx_12": { id: "tx_12", date: "2026-06-29", qty: 500, price_usd: 95.00, rate_ils: 3.07, status: "completed" }
         };
+
+        // Sync actual full activity transactions to Firebase
+        set(txRef, defaultTransactions);
 
         let currentTransactionsData = {};
 
@@ -317,15 +319,18 @@
                 }
             });
 
-            const INITIAL_TOTAL_SHARES = 13700;
+            const INITIAL_TOTAL_SHARES = 26050;
+            const INITIAL_BUCKET_B_SHARES = 25450; // Low basis ($1.04)
+            const INITIAL_BUCKET_A_SHARES = 600;   // High basis ($23.00)
+
             const remainingShares = Math.max(0, INITIAL_TOTAL_SHARES - completedShares);
             totalShares = remainingShares;
 
-            // Deduct completed shares from Bucket B first (initial 13,100) then Bucket A (initial 600)
-            let remainingB = Math.max(0, 13100 - completedShares);
-            let remainingA = completedShares > 13100 
-                ? Math.max(0, 600 - (completedShares - 13100)) 
-                : 600;
+            // All completed sales were executed from Bucket B ($1.04 basis, initial 25,450)
+            let remainingB = Math.max(0, INITIAL_BUCKET_B_SHARES - completedShares);
+            let remainingA = completedShares > INITIAL_BUCKET_B_SHARES 
+                ? Math.max(0, INITIAL_BUCKET_A_SHARES - (completedShares - INITIAL_BUCKET_B_SHARES)) 
+                : INITIAL_BUCKET_A_SHARES;
 
             const valA = calculateNetValue(currentPriceUSD, portfolio.bucketA.basis, remainingA, currentRateILS);
             const valB = calculateNetValue(currentPriceUSD, portfolio.bucketB.basis, remainingB, currentRateILS);
