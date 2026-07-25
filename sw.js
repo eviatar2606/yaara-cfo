@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yaara-cfo-v12';
+const CACHE_NAME = 'yaara-cfo-v13';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
@@ -13,15 +13,11 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  // Always attempt network fetch first to get the latest app version
-  if (e.request.method !== 'GET') return;
-  e.respondWith(
-    fetch(e.request).then((networkResponse) => {
-      if (networkResponse && networkResponse.status === 200) {
-        const responseClone = networkResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(e.request, responseClone));
-      }
-      return networkResponse;
-    }).catch(() => caches.match(e.request))
-  );
+  // Always bypass cache for HTML / navigation requests so standalone home-screen PWA always loads fresh content!
+  if (e.request.mode === 'navigate' || (e.request.headers.get('accept') && e.request.headers.get('accept').includes('text/html'))) {
+    e.respondWith(
+      fetch(e.request).catch(() => caches.match(e.request))
+    );
+    return;
+  }
 });

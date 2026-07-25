@@ -907,28 +907,56 @@
         });
     </script>
 
-    <!-- Register Service Worker for PWA with Auto-Refresh -->
+    <!-- Register Service Worker for PWA with Instant Update & Auto-Refresh -->
     <script>
         if ('serviceWorker' in navigator) {
+            function updateSW() {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    for (let registration of registrations) {
+                        registration.update();
+                    }
+                });
+            }
+
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').then((reg) => {
+                    reg.update();
                     reg.addEventListener('updatefound', () => {
                         const newWorker = reg.installing;
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                window.location.reload();
-                            }
-                        });
+                        if (newWorker) {
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    if (window.caches) {
+                                        caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).then(() => {
+                                            window.location.reload(true);
+                                        });
+                                    } else {
+                                        window.location.reload(true);
+                                    }
+                                }
+                            });
+                        }
                     });
-                    reg.update();
                 }).catch((err) => console.warn('SW registration failed', err));
+            });
+
+            // Trigger update check whenever app comes to foreground or focus
+            window.addEventListener('focus', updateSW);
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') updateSW();
             });
 
             let refreshing = false;
             navigator.serviceWorker.addEventListener('controllerchange', () => {
                 if (!refreshing) {
                     refreshing = true;
-                    window.location.reload();
+                    if (window.caches) {
+                        caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).then(() => {
+                            window.location.reload(true);
+                        });
+                    } else {
+                        window.location.reload(true);
+                    }
                 }
             });
         }
